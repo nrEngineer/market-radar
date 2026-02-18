@@ -7,7 +7,7 @@
 set -e
 
 echo "🔒 Force GitHub History Cleanup (git filter-branch)"
-echo "🎯 Target: Complete removal of 'cron-secret-token' from all history"
+echo "🎯 Target: Complete removal of 'SECRET_TOKEN' from all history"
 echo ""
 
 cd /Users/ryosukenakamura/.openclaw/workspace/market-radar
@@ -15,7 +15,7 @@ cd /Users/ryosukenakamura/.openclaw/workspace/market-radar
 # 1. 現在の状況確認
 echo "📊 Current repository status:"
 echo "   Branch: $(git branch --show-current)"
-echo "   Commits with secrets: $(git log --all --full-history -p | grep -c "cron-secret-token" || echo "0")"
+echo "   Commits with secrets: $(git log --all --full-history -p | grep -c "SECRET_TOKEN" || echo "0")"
 
 # 2. バックアップブランチ作成
 echo ""
@@ -32,13 +32,13 @@ git filter-branch --force --index-filter \
 --prune-empty --tree-filter '
 if [ -d "." ]; then
     # Replace secrets in all files
-    find . -type f \( -name "*.ts" -o -name "*.js" -o -name "*.md" -o -name "*.json" \) -exec sed -i.bak "s/cron-secret-token/\*\*\*REMOVED\*\*\*/g" {} \; 2>/dev/null || true
+    find . -type f \( -name "*.ts" -o -name "*.js" -o -name "*.md" -o -name "*.json" \) -exec sed -i.bak "s/SECRET_TOKEN/\*\*\*REMOVED\*\*\*/g" {} \; 2>/dev/null || true
     find . -name "*.bak" -delete 2>/dev/null || true
     
     # Remove specific problematic patterns
-    find . -type f -exec sed -i.bak "s/Bearer cron-secret-token/Bearer \*\*\*REMOVED\*\*\*/g" {} \; 2>/dev/null || true
-    find . -type f -exec sed -i.bak "s/\"Bearer cron-secret-token\"/\"Bearer \*\*\*REMOVED\*\*\*\"/g" {} \; 2>/dev/null || true
-    find . -type f -exec sed -i.bak "s/'\''Bearer cron-secret-token'\''/'\''Bearer \*\*\*REMOVED\*\*\*'\''/g" {} \; 2>/dev/null || true
+    find . -type f -exec sed -i.bak "s/Bearer SECRET_TOKEN/Bearer \*\*\*REMOVED\*\*\*/g" {} \; 2>/dev/null || true
+    find . -type f -exec sed -i.bak "s/\"Bearer SECRET_TOKEN\"/\"Bearer \*\*\*REMOVED\*\*\*\"/g" {} \; 2>/dev/null || true
+    find . -type f -exec sed -i.bak "s/'\''Bearer SECRET_TOKEN'\''/'\''Bearer \*\*\*REMOVED\*\*\*'\''/g" {} \; 2>/dev/null || true
     find . -name "*.bak" -delete 2>/dev/null || true
 fi
 ' --tag-name-filter cat -- --all
@@ -46,7 +46,7 @@ fi
 # 4. 結果確認
 echo ""
 echo "🔍 Verifying cleanup results..."
-SECRET_COUNT=$(git log --all --full-history -p | grep -c "cron-secret-token" || echo "0")
+SECRET_COUNT=$(git log --all --full-history -p | grep -c "SECRET_TOKEN" || echo "0")
 echo "   Remaining secrets in history: $SECRET_COUNT"
 
 if [ "$SECRET_COUNT" -eq 0 ]; then
@@ -74,7 +74,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo ""
     echo "🔧 What was done:"
     echo "   - Processed all commits across all branches"
-    echo "   - Replaced 'cron-secret-token' with '***REMOVED***'"
+    echo "   - Replaced 'SECRET_TOKEN' with '***REMOVED***'"
     echo "   - Used git filter-branch for comprehensive cleanup"
     echo "   - Backup branch created before changes"
     

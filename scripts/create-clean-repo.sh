@@ -41,11 +41,11 @@ git config user.email "nrengineer@users.noreply.github.com"
 # 5. 秘密情報が含まれていないことを確認
 echo ""
 echo "🔍 Verifying no secrets in current files..."
-SECRET_FILES=$(grep -r "cron-secret-token" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=.next || true)
+SECRET_FILES=$(grep -r "SECRET_TOKEN" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=.next || true)
 if [ -n "$SECRET_FILES" ]; then
     echo "⚠️  Found secrets in files - cleaning..."
-    find . -type f \( -name "*.ts" -o -name "*.js" -o -name "*.md" -o -name "*.json" \) -exec sed -i.bak 's/cron-secret-token/***REMOVED***/g' {} \;
-    find . -type f \( -name "*.ts" -o -name "*.js" -o -name "*.md" -o -name "*.json" \) -exec sed -i.bak 's/Bearer cron-secret-token/Bearer ***REMOVED***/g' {} \;
+    find . -type f \( -name "*.ts" -o -name "*.js" -o -name "*.md" -o -name "*.json" \) -exec sed -i.bak 's/SECRET_TOKEN/***REMOVED***/g' {} \;
+    find . -type f \( -name "*.ts" -o -name "*.js" -o -name "*.md" -o -name "*.json" \) -exec sed -i.bak 's/Bearer SECRET_TOKEN/Bearer ***REMOVED***/g' {} \;
     find . -name "*.bak" -delete
     echo "   ✅ Secrets cleaned from current files"
 else

@@ -7,7 +7,7 @@
 set -e  # エラー時に停止
 
 echo "🔒 GitHub History Security Cleanup Starting..."
-echo "🎯 Target: Remove 'cron-secret-token' from all commits"
+echo "🎯 Target: Remove 'SECRET_TOKEN' from all commits"
 echo ""
 
 # 作業ディレクトリ
@@ -18,10 +18,10 @@ CLEAN_DIR="$WORK_DIR/market-radar-clean"
 # 1. 秘密情報のリストファイル作成
 echo "📝 Creating secrets replacement file..."
 cat > /tmp/git-secrets.txt << 'EOF'
-cron-secret-token=>***REMOVED***
-Bearer cron-secret-token=>Bearer ***REMOVED***
-'Bearer cron-secret-token'=>'Bearer ***REMOVED***'
-"Bearer cron-secret-token"=>"Bearer ***REMOVED***"
+SECRET_TOKEN=>***REMOVED***
+Bearer SECRET_TOKEN=>Bearer ***REMOVED***
+'Bearer SECRET_TOKEN'=>'Bearer ***REMOVED***'
+"Bearer SECRET_TOKEN"=>"Bearer ***REMOVED***"
 EOF
 
 echo "   ✅ Secrets file created: /tmp/git-secrets.txt"
@@ -66,7 +66,7 @@ git gc --prune=now --aggressive
 echo ""
 echo "🔍 Verifying cleanup results..."
 echo "   Checking for remaining secrets..."
-if git log --all --full-history -- | grep -i "cron-secret-token" | wc -l | xargs test 0 -eq; then
+if git log --all --full-history -- | grep -i "SECRET_TOKEN" | wc -l | xargs test 0 -eq; then
     echo "   ✅ No secrets found in commit messages"
 else
     echo "   ⚠️  Secrets may still exist in commit messages"
