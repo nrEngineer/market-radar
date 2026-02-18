@@ -5,13 +5,14 @@
 
 import { createClient } from '@supabase/supabase-js'
 
-// Environment variables validation
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+// Environment variables with build-time safe fallbacks
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-anon-key'
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables')
+// Helper function to check if Supabase is properly configured
+export function isSupabaseConfigured(): boolean {
+  return supabaseUrl !== 'https://placeholder.supabase.co' && supabaseAnonKey !== 'placeholder-anon-key'
 }
 
 // Client for public operations (browser/client-side)
@@ -22,11 +23,15 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 })
 
 // Admin client for server operations (API routes)
-export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey || supabaseAnonKey, {
-  auth: {
-    persistSession: false,
-  },
-})
+export const supabaseAdmin = createClient(
+  supabaseUrl, 
+  supabaseServiceKey || supabaseAnonKey, 
+  {
+    auth: {
+      persistSession: false,
+    },
+  }
+)
 
 // Database Table Types
 export interface DatabaseOpportunity {
