@@ -21,7 +21,8 @@
     "stripe": "^20.3.1"
   },
   "engines": {
-    "node": "20.x"
+    "node": "20.x",
+    "npm": "10.x"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
