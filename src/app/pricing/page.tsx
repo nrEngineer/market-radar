@@ -100,7 +100,7 @@ function PricingCard({ plan, onSelectPlan, loading }: PricingCardProps) {
     >
       {plan.popular && (
         <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-          <Badge variant="brand" className="px-4 py-1 text-sm font-bold">
+          <Badge variant="brand">
             Most Popular
           </Badge>
         </div>
@@ -224,7 +224,7 @@ export default function PricingPage() {
   }
 
   return (
-    <PageLayout>
+    <PageLayout title="料金プラン">
       <div className="py-16">
         {/* Header */}
         <div className="text-center mb-16">
@@ -267,7 +267,7 @@ export default function PricingPage() {
                 <h3 className="text-lg font-bold text-blue-600 mb-2">Market Radar</h3>
                 <div className="text-3xl font-bold text-blue-600 mb-2">¥5,000</div>
                 <div className="text-sm text-slate-500">リアルタイム・無制限</div>
-                <Badge variant="emerald" className="mt-2">99%コストダウン</Badge>
+                <Badge variant="emerald">99%コストダウン</Badge>
               </div>
             </div>
           </div>

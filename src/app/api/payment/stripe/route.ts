@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
-// Initialize Stripe with secret key
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2026-01-28.clover',
-})
+// Initialize Stripe with secret key (conditional for build)
+const stripe = process.env.STRIPE_SECRET_KEY 
+  ? new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: '2026-01-28.clover',
+    })
+  : null
 
 // Pricing plans configuration
 const PRICING_PLANS = {
@@ -40,6 +42,10 @@ const PRICING_PLANS = {
 // Create checkout session
 export async function POST(request: NextRequest) {
   try {
+    if (!stripe) {
+      return NextResponse.json({ error: 'Payment system not configured' }, { status: 500 })
+    }
+
     const { plan, success_url, cancel_url, customer_email } = await request.json()
 
     // Validate plan
@@ -48,6 +54,11 @@ export async function POST(request: NextRequest) {
     }
 
     const planConfig = PRICING_PLANS[plan as keyof typeof PRICING_PLANS]
+
+    // Ensure plan has stripe_price_id
+    if (!('stripe_price_id' in planConfig)) {
+      return NextResponse.json({ error: 'Plan not available for purchase' }, { status: 400 })
+    }
 
     // Create checkout session
     const session = await stripe.checkout.sessions.create({
@@ -91,6 +102,10 @@ export async function POST(request: NextRequest) {
 // Handle webhook events
 export async function PUT(request: NextRequest) {
   try {
+    if (!stripe) {
+      return NextResponse.json({ error: 'Payment system not configured' }, { status: 500 })
+    }
+
     const signature = request.headers.get('stripe-signature')!
     const body = await request.text()
 
