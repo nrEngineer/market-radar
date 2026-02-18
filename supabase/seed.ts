@@ -5,6 +5,7 @@
 
 import { createClient } from '@supabase/supabase-js'
 import { opportunities, trends, categories } from '../src/lib/data'
+import type { OpportunityDetail, TrendData, CategoryDetail } from '../src/lib/types'
 
 // Environment variables validation
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -20,7 +21,7 @@ if (!supabaseUrl || !supabaseServiceKey) {
 const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
 // Convert opportunities to database format
-function convertOpportunityToDB(opp: any) {
+function convertOpportunityToDB(opp: OpportunityDetail) {
   return {
     id: opp.id,
     title: opp.title,
@@ -46,7 +47,7 @@ function convertOpportunityToDB(opp: any) {
 }
 
 // Convert trends to database format
-function convertTrendToDB(trend: any) {
+function convertTrendToDB(trend: TrendData) {
   return {
     id: trend.id,
     name: trend.name,
@@ -62,13 +63,13 @@ function convertTrendToDB(trend: any) {
     prediction: trend.prediction,
     five_w1h: trend.fiveW1H,
     provenance: trend.provenance,
-    created_at: trend.createdAt,
-    updated_at: trend.updatedAt,
+    created_at: new Date().toISOString(),
+    updated_at: trend.provenance.updatedAt,
   }
 }
 
 // Convert categories to database format  
-function convertCategoryToDB(cat: any) {
+function convertCategoryToDB(cat: CategoryDetail) {
   return {
     id: cat.id,
     name: cat.name,
