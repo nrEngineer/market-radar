@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-// Supabase client with service role key for API access
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+// Supabase client with service role key for API access (with fallbacks for build)
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-key'
+
+const supabase = createClient(supabaseUrl, supabaseKey)
 
 // Helper function to get real-time stats from database
 async function getStats() {
@@ -113,6 +113,14 @@ async function getCollectionStatus() {
 // Main data API endpoint
 export async function GET(request: NextRequest) {
   try {
+    // Check if Supabase is properly configured
+    if (supabaseUrl === 'https://placeholder.supabase.co' || supabaseKey === 'placeholder-key') {
+      return NextResponse.json({
+        error: 'Database not configured',
+        message: 'Please configure Supabase environment variables'
+      }, { status: 503 })
+    }
+
     const { searchParams } = new URL(request.url)
     const type = searchParams.get('type')
 

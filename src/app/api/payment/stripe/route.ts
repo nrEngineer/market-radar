@@ -70,8 +70,8 @@ export async function POST(request: NextRequest) {
           quantity: 1,
         },
       ],
-      success_url: success_url || `${process.env.NEXTAUTH_URL}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: cancel_url || `${process.env.NEXTAUTH_URL}/pricing`,
+      success_url: success_url || `${process.env.NEXTAUTH_URL || 'https://market-radar-rho.vercel.app'}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: cancel_url || `${process.env.NEXTAUTH_URL || 'https://market-radar-rho.vercel.app'}/pricing`,
       customer_email: customer_email,
       metadata: {
         plan: plan,
@@ -106,14 +106,22 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'Payment system not configured' }, { status: 500 })
     }
 
-    const signature = request.headers.get('stripe-signature')!
+    const signature = request.headers.get('stripe-signature')
+    if (!signature) {
+      return NextResponse.json({ error: 'Missing signature' }, { status: 400 })
+    }
+
+    if (!process.env.STRIPE_WEBHOOK_SECRET) {
+      return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 })
+    }
+
     const body = await request.text()
 
     // Verify webhook signature
     const event = stripe.webhooks.constructEvent(
       body,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET!
+      process.env.STRIPE_WEBHOOK_SECRET
     )
 
     switch (event.type) {
