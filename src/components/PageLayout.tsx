@@ -84,3 +84,5 @@ export function PageLayout({ title, subtitle, icon, children, breadcrumbs, actio
     </div>
   )
 }
+
+export default PageLayout

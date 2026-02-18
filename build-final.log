@@ -1,0 +1,137 @@
+
+> market-radar@0.1.0 build
+> next build
+
+▲ Next.js 16.1.6 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 5 errors:
+./src/app/pricing/page.tsx:4:1
+Module not found: Can't resolve '../components/motion'
+[0m [90m 2 |[39m
+ [90m 3 |[39m [36mimport[39m { useState } [36mfrom[39m [32m'react'[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m { motion } [36mfrom[39m [32m'../components/motion'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[39m [33mPageLayout[39m [36mfrom[39m [32m'@/components/PageLayout'[39m
+ [90m 6 |[39m [36mimport[39m [33mBadge[39m [36mfrom[39m [32m'@/components/Badge'[39m
+ [90m 7 |[39m[0m
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/pricing/page.tsx [Client Component Browser]
+    ./src/app/pricing/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/pricing/page.tsx [Client Component SSR]
+    ./src/app/pricing/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/pricing/page.tsx:6:1
+Export default doesn't exist in target module
+[0m [90m 4 |[39m [36mimport[39m { motion } [36mfrom[39m [32m'../components/motion'[39m
+ [90m 5 |[39m [36mimport[39m [33mPageLayout[39m [36mfrom[39m [32m'@/components/PageLayout'[39m
+[31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m [33mBadge[39m [36mfrom[39m [32m'@/components/Badge'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 7 |[39m
+ [90m 8 |[39m [36mconst[39m pricingPlans [33m=[39m [
+ [90m 9 |[39m   {[0m
+
+The export default was not found in module [project]/src/components/Badge.tsx [app-client] (ecmascript).
+Did you mean to import Badge?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./src/app/pricing/page.tsx [Client Component Browser]
+    ./src/app/pricing/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/pricing/page.tsx [Client Component SSR]
+    ./src/app/pricing/page.tsx [Server Component]
+
+
+./src/app/pricing/page.tsx:6:1
+Export default doesn't exist in target module
+[0m [90m 4 |[39m [36mimport[39m { motion } [36mfrom[39m [32m'../components/motion'[39m
+ [90m 5 |[39m [36mimport[39m [33mPageLayout[39m [36mfrom[39m [32m'@/components/PageLayout'[39m
+[31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m [33mBadge[39m [36mfrom[39m [32m'@/components/Badge'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 7 |[39m
+ [90m 8 |[39m [36mconst[39m pricingPlans [33m=[39m [
+ [90m 9 |[39m   {[0m
+
+The export default was not found in module [project]/src/components/Badge.tsx [app-ssr] (ecmascript).
+Did you mean to import Badge?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./src/app/pricing/page.tsx [Client Component Browser]
+    ./src/app/pricing/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/pricing/page.tsx [Client Component SSR]
+    ./src/app/pricing/page.tsx [Server Component]
+
+
+./src/app/pricing/page.tsx:5:1
+Export default doesn't exist in target module
+[0m [90m 3 |[39m [36mimport[39m { useState } [36mfrom[39m [32m'react'[39m
+ [90m 4 |[39m [36mimport[39m { motion } [36mfrom[39m [32m'../components/motion'[39m
+[31m[1m>[22m[39m[90m 5 |[39m [36mimport[39m [33mPageLayout[39m [36mfrom[39m [32m'@/components/PageLayout'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 6 |[39m [36mimport[39m [33mBadge[39m [36mfrom[39m [32m'@/components/Badge'[39m
+ [90m 7 |[39m
+ [90m 8 |[39m [36mconst[39m pricingPlans [33m=[39m [[0m
+
+The export default was not found in module [project]/src/components/PageLayout.tsx [app-client] (ecmascript).
+Did you mean to import PageLayout?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./src/app/pricing/page.tsx [Client Component Browser]
+    ./src/app/pricing/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/pricing/page.tsx [Client Component SSR]
+    ./src/app/pricing/page.tsx [Server Component]
+
+
+./src/app/pricing/page.tsx:5:1
+Export default doesn't exist in target module
+[0m [90m 3 |[39m [36mimport[39m { useState } [36mfrom[39m [32m'react'[39m
+ [90m 4 |[39m [36mimport[39m { motion } [36mfrom[39m [32m'../components/motion'[39m
+[31m[1m>[22m[39m[90m 5 |[39m [36mimport[39m [33mPageLayout[39m [36mfrom[39m [32m'@/components/PageLayout'[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 6 |[39m [36mimport[39m [33mBadge[39m [36mfrom[39m [32m'@/components/Badge'[39m
+ [90m 7 |[39m
+ [90m 8 |[39m [36mconst[39m pricingPlans [33m=[39m [[0m
+
+The export default was not found in module [project]/src/components/PageLayout.tsx [app-ssr] (ecmascript).
+Did you mean to import PageLayout?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./src/app/pricing/page.tsx [Client Component Browser]
+    ./src/app/pricing/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/pricing/page.tsx [Client Component SSR]
+    ./src/app/pricing/page.tsx [Server Component]
+
+
+    at <unknown> (./src/app/pricing/page.tsx:4:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/pricing/page.tsx:6:1)
+    at <unknown> (./src/app/pricing/page.tsx:6:1)
+    at <unknown> (./src/app/pricing/page.tsx:5:1)
+    at <unknown> (./src/app/pricing/page.tsx:5:1)
