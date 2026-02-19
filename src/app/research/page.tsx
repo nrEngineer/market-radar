@@ -2,11 +2,25 @@
 
 import { useState } from 'react'
 
+interface Finding {
+  title: string
+  description: string
+  confidence?: number
+}
+
+interface ResearchResults {
+  error?: string
+  details?: string
+  summary?: string
+  findings?: Finding[]
+  insights?: string[]
+}
+
 // 🔍 Custom Research Interface - Maximum Freedom
 export default function CustomResearchPage() {
   const [query, setQuery] = useState('')
   const [researchType, setResearchType] = useState('market')
-  const [results, setResults] = useState(null)
+  const [results, setResults] = useState<ResearchResults | null>(null)
   const [loading, setLoading] = useState(false)
 
   const researchTypes = [
@@ -40,7 +54,7 @@ export default function CustomResearchPage() {
       
     } catch (error) {
       console.error('Research failed:', error)
-      setResults({ error: 'Research failed', details: error.message })
+      setResults({ error: 'Research failed', details: error instanceof Error ? error.message : 'Unknown error' })
     } finally {
       setLoading(false)
     }

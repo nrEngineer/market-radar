@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     console.error('Custom research failed:', error)
     return NextResponse.json({ 
       error: 'Research execution failed',
-      details: error.message 
+      details: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 500 })
   }
 }
