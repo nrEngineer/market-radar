@@ -1,0 +1,101 @@
+import type { CategoryDetail } from '@/domain/types'
+import { defaultProvenance } from '@/data/provenance'
+
+export const categories: CategoryDetail[] = [
+  {
+    id: 'cat-ai', name: 'AI Tools', slug: 'ai-tools', description: 'AIを活用したツール・アプリケーション',
+    icon: '🤖', color: 'violet',
+    totalApps: 234, totalRevenue: '¥2.8B', avgRevenue: '¥12M', medianRevenue: '¥3.2M',
+    growth: '+23%', yoyGrowth: '+156%',
+    sizing: {
+      tam: { value: 120000000000, unit: '円', description: '日本AI市場全体', year: 2026 },
+      sam: { value: 25000000000, unit: '円', description: 'AI B2Cツール市場', year: 2026 },
+      som: { value: 500000000, unit: '円', description: '参入可能セグメント', year: 2026 },
+      cagr: 34.5, methodology: 'IDC Japan AI Market Report + 独自推計',
+      sources: ['IDC Japan', 'Gartner Magic Quadrant', 'CB Insights'],
+    },
+    monthlyData: [
+      { month: '2025-09', apps: 180, revenue: 1800000000, growth: 18 },
+      { month: '2025-10', apps: 192, revenue: 2000000000, growth: 20 },
+      { month: '2025-11', apps: 205, revenue: 2200000000, growth: 22 },
+      { month: '2025-12', apps: 218, revenue: 2500000000, growth: 24 },
+      { month: '2026-01', apps: 226, revenue: 2650000000, growth: 23 },
+      { month: '2026-02', apps: 234, revenue: 2800000000, growth: 23 },
+    ],
+    topApps: [
+      { name: 'ChatGPT', revenue: '¥500M/月', downloads: '2M/月', rating: 4.8, growth: '+12%' },
+      { name: 'Notion AI', revenue: '¥200M/月', downloads: '800K/月', rating: 4.6, growth: '+18%' },
+      { name: 'Perplexity', revenue: '¥120M/月', downloads: '500K/月', rating: 4.7, growth: '+45%' },
+      { name: 'Jasper', revenue: '¥80M/月', downloads: '200K/月', rating: 4.3, growth: '+8%' },
+    ],
+    subcategories: [
+      { name: 'AI Writing', count: 45, growth: '+28%', avgRevenue: '¥8M' },
+      { name: 'AI Image', count: 38, growth: '+42%', avgRevenue: '¥15M' },
+      { name: 'AI Code', count: 32, growth: '+55%', avgRevenue: '¥20M' },
+      { name: 'AI Chat', count: 28, growth: '+35%', avgRevenue: '¥12M' },
+      { name: 'AI Video', count: 22, growth: '+68%', avgRevenue: '¥18M' },
+    ],
+    regions: [
+      { name: '北米', marketShare: 42, growth: '+25%', revenue: '¥52B' },
+      { name: 'アジア太平洋', marketShare: 28, growth: '+38%', revenue: '¥35B' },
+      { name: '欧州', marketShare: 22, growth: '+20%', revenue: '¥27B' },
+      { name: 'その他', marketShare: 8, growth: '+15%', revenue: '¥10B' },
+    ],
+    fiveW1H: {
+      what: 'AIツール市場の包括的分析。234アプリの収益・成長・ポジショニングデータ',
+      who: 'AI市場への参入を検討する起業家・投資家・プロダクトマネージャー',
+      when: '2026年2月時点。6ヶ月間の時系列データ含む',
+      where: 'グローバル市場（日本フォーカス）',
+      why: 'CAGR 34.5%の急成長市場。参入タイミングが成功の鍵',
+      how: 'ニッチ特化 or AI APIラッパー型での低コスト参入を推奨',
+    },
+    provenance: defaultProvenance,
+  },
+  {
+    id: 'cat-prod', name: 'Productivity', slug: 'productivity', description: '生産性向上ツール・タスク管理',
+    icon: '⚡', color: 'cyan',
+    totalApps: 189, totalRevenue: '¥1.9B', avgRevenue: '¥10M', medianRevenue: '¥2.8M',
+    growth: '+18%', yoyGrowth: '+45%',
+    sizing: {
+      tam: { value: 80000000000, unit: '円', description: '日本の生産性ツール市場', year: 2026 },
+      sam: { value: 15000000000, unit: '円', description: 'クラウド型生産性SaaS', year: 2026 },
+      som: { value: 300000000, unit: '円', description: '参入可能セグメント', year: 2026 },
+      cagr: 18.2, methodology: '業界レポート + App Store公開データ分析',
+      sources: ['Gartner', 'Forrester', 'App Annie'],
+    },
+    monthlyData: [
+      { month: '2025-09', apps: 155, revenue: 1400000000, growth: 14 },
+      { month: '2025-10', apps: 162, revenue: 1500000000, growth: 15 },
+      { month: '2025-11', apps: 170, revenue: 1600000000, growth: 16 },
+      { month: '2025-12', apps: 178, revenue: 1750000000, growth: 17 },
+      { month: '2026-01', apps: 184, revenue: 1800000000, growth: 18 },
+      { month: '2026-02', apps: 189, revenue: 1900000000, growth: 18 },
+    ],
+    topApps: [
+      { name: 'Notion', revenue: '¥350M/月', downloads: '1.5M/月', rating: 4.7, growth: '+15%' },
+      { name: 'Todoist', revenue: '¥80M/月', downloads: '400K/月', rating: 4.5, growth: '+10%' },
+      { name: 'TickTick', revenue: '¥50M/月', downloads: '300K/月', rating: 4.6, growth: '+22%' },
+    ],
+    subcategories: [
+      { name: 'Task Management', count: 52, growth: '+15%', avgRevenue: '¥9M' },
+      { name: 'Note Taking', count: 38, growth: '+20%', avgRevenue: '¥12M' },
+      { name: 'Time Tracking', count: 30, growth: '+12%', avgRevenue: '¥6M' },
+      { name: 'Calendar', count: 25, growth: '+18%', avgRevenue: '¥8M' },
+    ],
+    regions: [
+      { name: '北米', marketShare: 38, growth: '+18%', revenue: '¥30B' },
+      { name: 'アジア太平洋', marketShare: 30, growth: '+25%', revenue: '¥24B' },
+      { name: '欧州', marketShare: 25, growth: '+15%', revenue: '¥20B' },
+      { name: 'その他', marketShare: 7, growth: '+10%', revenue: '¥6B' },
+    ],
+    fiveW1H: {
+      what: '生産性ツール市場の詳細分析。189アプリの動向',
+      who: 'プロダクティビティ市場参入者、投資判断者',
+      when: '2026年2月。過去6ヶ月推移含む',
+      where: 'グローバル（日本フォーカス）',
+      why: '安定成長でリスク低。AI統合が差別化ポイント',
+      how: 'AI + 日本語特化でニッチを掘る',
+    },
+    provenance: defaultProvenance,
+  },
+]

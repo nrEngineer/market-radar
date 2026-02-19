@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
-import { supabase, isSupabaseConfigured } from '@/lib/supabase'
+import { supabase, isSupabaseConfigured } from '@/server/db/client'
+import { notifyAPIHealth } from '@/server/discord-notify'
 
 interface HealthCheck {
   status: 'healthy' | 'degraded' | 'unhealthy'
@@ -47,6 +48,14 @@ export async function GET(): Promise<NextResponse<HealthCheck>> {
     version: '0.1.0',
     checks,
     responseTimeMs: Date.now() - startTime,
+  }
+
+  if (!allOk) {
+    notifyAPIHealth({
+      healthy: false,
+      dbLatency: checks.database.latencyMs,
+      details: `Database: ${checks.database.status}, API: ${checks.api.status}`,
+    }).catch(() => {})
   }
 
   return NextResponse.json(response, { status: allOk ? 200 : 503 })

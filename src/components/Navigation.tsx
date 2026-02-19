@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { navItems } from '@/lib/data'
+import { navItems } from '@/data'
 
 export function Navigation() {
   const pathname = usePathname()
@@ -13,7 +13,7 @@ export function Navigation() {
   return (
     <>
       {/* Desktop Navigation Bar */}
-      <nav className="hidden lg:block border-b border-slate-200/60 bg-white/80 backdrop-blur-sm">
+      <nav aria-label="メインナビゲーション" className="hidden lg:block border-b border-slate-200/60 bg-white/80 backdrop-blur-sm">
         <div className="mx-auto max-w-7xl px-6 sm:px-8">
           <div className="flex items-center gap-1 overflow-x-auto py-1 scrollbar-hide">
             {navItems.map((item) => {
@@ -57,6 +57,7 @@ export function Navigation() {
       <div className="lg:hidden fixed bottom-6 right-6 z-50">
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label={mobileOpen ? 'ナビゲーションメニューを閉じる' : 'ナビゲーションメニューを開く'}
           className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#2c4377] text-white shadow-lg shadow-[#2c4377]/20 transition-transform active:scale-95"
         >
           <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
@@ -85,6 +86,9 @@ export function Navigation() {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              role="dialog"
+              aria-modal="true"
+              aria-label="ナビゲーションメニュー"
               className="fixed inset-x-0 bottom-0 z-40 rounded-t-3xl border-t border-slate-200 bg-white p-6 pb-24 lg:hidden"
             >
               <div className="mb-4 flex justify-center">

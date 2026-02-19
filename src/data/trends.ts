@@ -1,0 +1,105 @@
+import type { TrendData } from '@/domain/types'
+import { defaultProvenance } from '@/data/provenance'
+
+export const trends: TrendData[] = [
+  {
+    id: 'trend-001',
+    name: 'AIエージェント（Agentic AI）',
+    category: 'AI / Machine Learning',
+    status: 'emerging',
+    momentum: 92,
+    searchVolume: [
+      { month: '2025-09', value: 3200 }, { month: '2025-10', value: 5400 }, { month: '2025-11', value: 8100 },
+      { month: '2025-12', value: 12300 }, { month: '2026-01', value: 18500 }, { month: '2026-02', value: 24000 },
+    ],
+    adoptionCurve: 'early_adopters',
+    impact: 'transformative',
+    timeframe: '6-18ヶ月で主流化',
+    relatedTrends: ['LLM', 'Workflow Automation', 'No-Code'],
+    signals: [
+      { source: 'Product Hunt', signal: 'AIエージェント系プロダクトが週間Top5に3件', date: '2026-02-15', strength: 95 },
+      { source: 'Hacker News', signal: 'Agentic AI関連記事がフロントページ常連化', date: '2026-02-17', strength: 88 },
+      { source: 'App Store', signal: 'AIアシスタントカテゴリの新規参入が前月比+40%', date: '2026-02-10', strength: 82 },
+      { source: 'VC Funding', signal: 'AI Agent関連のシード投資が前年比3倍', date: '2026-02-01', strength: 90 },
+    ],
+    prediction: {
+      shortTerm: '開発者・テック企業での採用加速。Coding Agent、Data Agentが先行',
+      midTerm: '一般消費者向けAIエージェント製品の普及。パーソナルアシスタント市場が再定義',
+      longTerm: '企業のワークフロー自動化の標準に。RPA市場を吸収・置換',
+    },
+    fiveW1H: {
+      what: '自律的にタスクを計画・実行するAIシステム。従来のチャットボットを超え、複数ツールを連携して目標を達成',
+      who: 'テック企業の開発者・プロダクトマネージャー、業務効率化を求める企業',
+      when: '2024年後半から急速に注目度上昇。2026年がtipping point',
+      where: 'グローバル、特にUS・日本・EU。SaaS/エンタープライズ市場',
+      why: 'GPT-4レベルのLLMがツール使用能力を獲得し、実用的なエージェントが可能に',
+      how: 'AIエージェントプラットフォーム構築 or 既存SaaSへのエージェント機能統合',
+    },
+    provenance: defaultProvenance,
+  },
+  {
+    id: 'trend-002',
+    name: 'バーティカルSaaS 2.0',
+    category: 'SaaS / Enterprise',
+    status: 'growing',
+    momentum: 78,
+    searchVolume: [
+      { month: '2025-09', value: 4500 }, { month: '2025-10', value: 5200 }, { month: '2025-11', value: 6100 },
+      { month: '2025-12', value: 7200 }, { month: '2026-01', value: 8400 }, { month: '2026-02', value: 9800 },
+    ],
+    adoptionCurve: 'early_majority',
+    impact: 'high',
+    timeframe: '既に成長中、今後3年で成熟',
+    relatedTrends: ['Embedded Finance', 'Industry-specific AI', 'Micro-SaaS'],
+    signals: [
+      { source: 'Product Hunt', signal: '業界特化型SaaSのローンチ数が前年比+35%', date: '2026-02-12', strength: 80 },
+      { source: 'Crunchbase', signal: 'バーティカルSaaSのシリーズA調達額が過去最高', date: '2026-01-28', strength: 85 },
+    ],
+    prediction: {
+      shortTerm: '医療・不動産・飲食業界での新規プレイヤー増加',
+      midTerm: 'AI統合によるバーティカルSaaSの機能拡張が加速',
+      longTerm: '各業界で2-3社に集約。M&A活発化',
+    },
+    fiveW1H: {
+      what: '特定業界に特化したSaaS。汎用ツールでは満たせない業界固有のニーズに対応',
+      who: '特定業界の中小企業経営者・現場マネージャー',
+      when: '2023年から第2波。AI統合が差別化要因に',
+      where: '日本市場は特に飲食・医療・不動産で余地あり',
+      why: '汎用SaaSの成熟に伴い、業界特化の需要が顕在化',
+      how: '業界知識 × SaaS開発。ドメインエキスパートとのco-creation',
+    },
+    provenance: defaultProvenance,
+  },
+  {
+    id: 'trend-003',
+    name: 'クリエイターエコノミー3.0',
+    category: 'Platform / Creator',
+    status: 'growing',
+    momentum: 72,
+    searchVolume: [
+      { month: '2025-09', value: 6800 }, { month: '2025-10', value: 7200 }, { month: '2025-11', value: 7800 },
+      { month: '2025-12', value: 8500 }, { month: '2026-01', value: 9200 }, { month: '2026-02', value: 10100 },
+    ],
+    adoptionCurve: 'early_majority',
+    impact: 'high',
+    timeframe: '進行中、2027年に成熟予測',
+    relatedTrends: ['AI Content Creation', 'Digital Products', 'Community Platforms'],
+    signals: [
+      { source: 'App Store', signal: 'クリエイターツールカテゴリの売上+22%', date: '2026-02-08', strength: 75 },
+    ],
+    prediction: {
+      shortTerm: 'AIツール活用で個人クリエイターの生産性が3倍に',
+      midTerm: '中間プラットフォーム不要の直接マネタイズモデルが主流に',
+      longTerm: 'クリエイター=起業家の時代。従来型メディアとの融合',
+    },
+    fiveW1H: {
+      what: 'AIツール活用によるクリエイターの生産性向上と直接マネタイズの拡大',
+      who: '個人クリエイター・インフルエンサー・副業者',
+      when: '2024年から加速。2026年が転換点',
+      where: '日本を含むグローバル。YouTube/TikTok/Instagram',
+      why: 'AI により制作コスト低下、マネタイズ手段の多様化',
+      how: 'クリエイター向けツール・プラットフォーム開発',
+    },
+    provenance: defaultProvenance,
+  },
+]

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 interface Finding {
   title: string
@@ -22,6 +22,7 @@ export default function CustomResearchPage() {
   const [researchType, setResearchType] = useState('market')
   const [results, setResults] = useState<ResearchResults | null>(null)
   const [loading, setLoading] = useState(false)
+  const abortRef = useRef<AbortController | null>(null)
 
   const researchTypes = [
     { id: 'market', name: '市場調査', icon: '📊' },
@@ -35,8 +36,10 @@ export default function CustomResearchPage() {
   ]
 
   const executeResearch = async () => {
+    abortRef.current?.abort()
+    abortRef.current = new AbortController()
     setLoading(true)
-    
+
     try {
       // Call custom research API
       const response = await fetch('/api/custom-research', {
@@ -46,9 +49,14 @@ export default function CustomResearchPage() {
           query,
           type: researchType,
           timestamp: new Date().toISOString()
-        })
+        }),
+        signal: abortRef.current.signal
       })
-      
+
+      if (!response.ok) {
+        throw new Error(`Research API error: ${response.status}`)
+      }
+
       const data = await response.json()
       setResults(data)
       

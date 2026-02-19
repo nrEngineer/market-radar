@@ -3,7 +3,7 @@
 import { PageLayout } from '@/components/PageLayout'
 import { ProvenanceCard } from '@/components/ProvenanceCard'
 import { AnimatedSection } from '@/components/motion'
-import { methodology, defaultProvenance } from '@/lib/data'
+import { methodology, defaultProvenance } from '@/data'
 
 export default function MethodologyPage() {
   return (

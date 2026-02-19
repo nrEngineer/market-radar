@@ -1,7 +1,7 @@
 'use client'
 
-import type { MarketSizing } from '@/lib/types'
-import { formatCurrency } from '@/lib/utils'
+import type { MarketSizing } from '@/domain/types'
+import { formatCurrency } from '@/domain/formatting'
 
 export function MarketSizingCard({ data }: { data: MarketSizing }) {
   const samPercent = (data.sam.value / data.tam.value) * 100

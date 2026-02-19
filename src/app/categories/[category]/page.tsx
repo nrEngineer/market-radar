@@ -9,8 +9,8 @@ import { MarketSizingCard } from '@/components/MarketSizingCard'
 import { MiniBarChart } from '@/components/MiniChart'
 import { ScoreBar } from '@/components/ScoreBar'
 import { AnimatedSection } from '@/components/motion'
-import { categories } from '@/lib/data'
-// formatCurrency available for future use from '@/lib/utils'
+import { categories } from '@/data'
+// formatCurrency available for future use from '@/domain/formatting'
 
 export default function CategoryDetailPage({ params }: { params: Promise<{ category: string }> }) {
   const { category } = use(params)

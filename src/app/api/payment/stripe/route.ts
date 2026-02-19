@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
+import { stripeCheckoutSchema } from '@/server/validation/schemas'
+import { notifyError } from '@/server/discord-notify'
 
 // Initialize Stripe with secret key (conditional for build)
 const stripe = process.env.STRIPE_SECRET_KEY 
@@ -46,19 +48,41 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Payment system not configured' }, { status: 500 })
     }
 
-    const { plan, success_url, cancel_url, customer_email } = await request.json()
+    const body = await request.json()
+    const parsed = stripeCheckoutSchema.safeParse(body)
 
-    // Validate plan
-    if (!PRICING_PLANS[plan as keyof typeof PRICING_PLANS] || plan === 'free') {
-      return NextResponse.json({ error: 'Invalid plan specified' }, { status: 400 })
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: 'Invalid request', issues: parsed.error.issues },
+        { status: 400 }
+      )
     }
 
-    const planConfig = PRICING_PLANS[plan as keyof typeof PRICING_PLANS]
+    const { plan, success_url, cancel_url, customer_email } = parsed.data
 
-    // Ensure plan has stripe_price_id
-    if (!('stripe_price_id' in planConfig)) {
-      return NextResponse.json({ error: 'Plan not available for purchase' }, { status: 400 })
+    // Validate redirect URLs to prevent open redirect attacks
+    const allowedHosts = [
+      'market-radar-rho.vercel.app',
+      'localhost',
+      '127.0.0.1',
+    ]
+
+    function isAllowedUrl(url: string | undefined): boolean {
+      if (!url) return true // Will use defaults
+      try {
+        const parsed = new URL(url)
+        return allowedHosts.some(host => parsed.hostname === host || parsed.hostname.endsWith(`.${host}`))
+      } catch {
+        return false
+      }
     }
+
+    if (!isAllowedUrl(success_url) || !isAllowedUrl(cancel_url)) {
+      return NextResponse.json({ error: 'Invalid redirect URL' }, { status: 400 })
+    }
+
+    // Plan is already validated by Zod schema (premium | professional | enterprise)
+    const planConfig = PRICING_PLANS[plan]
 
     // Create checkout session
     const session = await stripe.checkout.sessions.create({
@@ -92,68 +116,10 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Stripe checkout error:', error)
+    notifyError('payment/stripe', error instanceof Error ? error.message : 'Unknown error').catch(() => {})
     return NextResponse.json(
       { error: 'Failed to create checkout session' },
       { status: 500 }
-    )
-  }
-}
-
-// Handle webhook events
-export async function PUT(request: NextRequest) {
-  try {
-    if (!stripe) {
-      return NextResponse.json({ error: 'Payment system not configured' }, { status: 500 })
-    }
-
-    const signature = request.headers.get('stripe-signature')
-    if (!signature) {
-      return NextResponse.json({ error: 'Missing signature' }, { status: 400 })
-    }
-
-    if (!process.env.STRIPE_WEBHOOK_SECRET) {
-      return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 })
-    }
-
-    const body = await request.text()
-
-    // Verify webhook signature
-    const event = stripe.webhooks.constructEvent(
-      body,
-      signature,
-      process.env.STRIPE_WEBHOOK_SECRET
-    )
-
-    switch (event.type) {
-      case 'checkout.session.completed':
-        const session = event.data.object as Stripe.Checkout.Session
-        // TODO: Update user subscription in database
-        console.log('Subscription created:', session.id)
-        break
-
-      case 'customer.subscription.updated':
-        const subscription = event.data.object as Stripe.Subscription
-        // TODO: Update user limits and features
-        console.log('Subscription updated:', subscription.id)
-        break
-
-      case 'customer.subscription.deleted':
-        const deletedSub = event.data.object as Stripe.Subscription
-        // TODO: Downgrade user to free plan
-        console.log('Subscription cancelled:', deletedSub.id)
-        break
-
-      default:
-        console.log(`Unhandled event type: ${event.type}`)
-    }
-
-    return NextResponse.json({ received: true })
-
-  } catch (error) {
-    console.error('Webhook error:', error)
-    return NextResponse.json(
-      { error: 'Webhook processing failed' },
-      { status: 400 }
     )
   }
 }

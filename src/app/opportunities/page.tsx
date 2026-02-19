@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { PageLayout } from '@/components/PageLayout'
 import { Badge } from '@/components/Badge'
 // ScoreBar available from '@/components/ScoreBar'
-import { opportunities } from '@/lib/data'
+import { opportunities } from '@/data'
 import { AnimatedSection } from '@/components/motion'
 
 export default function OpportunitiesListPage() {

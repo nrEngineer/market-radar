@@ -249,3 +249,9 @@ body {
 .formal-divider {
   border-top: 1px solid rgba(15, 23, 42, 0.06);
 }
+
+/* ── Focus Visible (Accessibility) ── */
+:focus-visible {
+  outline: 2px solid #3d5a99;
+  outline-offset: 2px;
+}

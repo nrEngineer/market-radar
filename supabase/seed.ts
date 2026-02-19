@@ -4,8 +4,8 @@
    ═══════════════════════════════════════════════════════════════ */
 
 import { createClient } from '@supabase/supabase-js'
-import { opportunities, trends, categories } from '../src/lib/data'
-import type { OpportunityDetail, TrendData, CategoryDetail } from '../src/lib/types'
+import { opportunities, trends, categories } from '../src/data'
+import type { OpportunityDetail, TrendData, CategoryDetail } from '../src/domain/types'
 
 // Environment variables validation
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL

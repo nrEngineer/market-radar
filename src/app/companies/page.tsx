@@ -2,7 +2,7 @@
 
 import { PageLayout } from '@/components/PageLayout'
 import { AnimatedSection } from '@/components/motion'
-import { competitiveLandscape } from '@/lib/data'
+import { competitiveLandscape } from '@/data'
 
 export default function CompaniesPage() {
   return (

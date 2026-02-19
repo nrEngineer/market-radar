@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { productHuntAPI } from '@/lib/integrations/product-hunt-api'
+import { productHuntAPI } from '@/integrations/product-hunt/client'
+import { notifyError } from '@/server/discord-notify'
 
 // Product Hunt Data Collection API
 export async function GET(request: NextRequest) {
@@ -63,6 +64,7 @@ export async function GET(request: NextRequest) {
     
   } catch (error) {
     console.error('Product Hunt API error:', error)
+    notifyError('product-hunt-data', error instanceof Error ? error.message : 'Unknown error').catch(() => {})
     
     // Return fallback data to ensure system reliability
     return NextResponse.json({

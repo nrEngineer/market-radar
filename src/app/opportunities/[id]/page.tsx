@@ -11,8 +11,8 @@ import { ScoreBar } from '@/components/ScoreBar'
 // Badge component available from '@/components/Badge'
 import { MiniBarChart } from '@/components/MiniChart'
 import { AnimatedSection } from '@/components/motion'
-import { opportunities } from '@/lib/data'
-import { formatCurrency } from '@/lib/utils'
+import { opportunities } from '@/data'
+import { formatCurrency } from '@/domain/formatting'
 
 export default function OpportunityDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)

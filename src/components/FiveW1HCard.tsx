@@ -1,6 +1,6 @@
 'use client'
 
-import type { FiveW1H } from '@/lib/types'
+import type { FiveW1H } from '@/domain/types'
 
 const items = [
   { key: 'what', label: 'What', sublabel: '何のデータか', icon: '📊', color: 'brand' },

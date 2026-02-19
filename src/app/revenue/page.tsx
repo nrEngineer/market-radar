@@ -3,8 +3,8 @@
 import { PageLayout } from '@/components/PageLayout'
 import { MiniBarChart } from '@/components/MiniChart'
 import { AnimatedSection } from '@/components/motion'
-import { revenueModels, revenueProjections } from '@/lib/data'
-import { formatCurrency } from '@/lib/utils'
+import { revenueModels, revenueProjections } from '@/data'
+import { formatCurrency } from '@/domain/formatting'
 
 export default function RevenuePage() {
   return (

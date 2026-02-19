@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import PageLayout from '@/components/PageLayout'  
+import PageLayout from '@/components/PageLayout'
 import { Badge } from '@/components/Badge'
 
 const pricingPlans = [
@@ -184,12 +185,14 @@ function PricingCard({ plan, onSelectPlan, loading }: PricingCardProps) {
 }
 
 export default function PricingPage() {
+  const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleSelectPlan = async (planId: string) => {
     if (planId === 'free') {
       // Redirect to signup for free plan
-      window.location.href = '/signup?plan=free'
+      router.push('/signup?plan=free')
       return
     }
 
@@ -217,7 +220,8 @@ export default function PricingPage() {
       }
     } catch (error) {
       console.error('Checkout error:', error)
-      alert('決済処理でエラーが発生しました。しばらく後にお試しください。')
+      setError('決済処理でエラーが発生しました。しばらく後にお試しください。')
+      setTimeout(() => setError(null), 5000)
     } finally {
       setLoading(false)
     }
@@ -225,6 +229,19 @@ export default function PricingPage() {
 
   return (
     <PageLayout title="料金プラン">
+      {error && (
+        <div role="alert" className="fixed top-4 right-4 z-50 max-w-sm bg-red-50 border border-red-200 rounded-lg p-4 shadow-lg">
+          <div className="flex items-start gap-3">
+            <span className="text-red-500 flex-shrink-0">⚠</span>
+            <div>
+              <p className="text-sm font-medium text-red-800">{error}</p>
+            </div>
+            <button onClick={() => setError(null)} className="text-red-400 hover:text-red-600 flex-shrink-0" aria-label="閉じる">
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
       <div className="py-16">
         {/* Header */}
         <div className="text-center mb-16">

@@ -1,6 +1,6 @@
 'use client'
 
-import type { DataProvenance } from '@/lib/types'
+import type { DataProvenance } from '@/domain/types'
 import { ScoreBar } from './ScoreBar'
 
 export function ProvenanceCard({ data }: { data: DataProvenance }) {

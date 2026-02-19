@@ -4,7 +4,7 @@ import { PageLayout } from '@/components/PageLayout'
 import { MiniBarChart } from '@/components/MiniChart'
 import { ScoreBar } from '@/components/ScoreBar'
 import { AnimatedSection } from '@/components/motion'
-import { analyticsSummary } from '@/lib/data'
+import { analyticsSummary } from '@/data'
 
 export default function AnalyticsPage() {
   return (

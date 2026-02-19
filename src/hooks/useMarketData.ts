@@ -35,10 +35,10 @@ export function useMarketData() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const fetchData = async () => {
+  const fetchData = async (signal?: AbortSignal) => {
     try {
       setLoading(true)
-      const response = await fetch('/api/data')
+      const response = await fetch('/api/data', { signal })
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
@@ -48,6 +48,7 @@ export function useMarketData() {
       setData(result)
       setError(null)
     } catch (err) {
+      if (err instanceof Error && err.name === 'AbortError') return
       setError(err instanceof Error ? err.message : 'Unknown error')
     } finally {
       setLoading(false)
@@ -55,10 +56,14 @@ export function useMarketData() {
   }
 
   useEffect(() => {
-    fetchData()
-    const interval = setInterval(fetchData, 3 * 60 * 1000)
-    return () => clearInterval(interval)
+    const controller = new AbortController()
+    fetchData(controller.signal)
+    const interval = setInterval(() => fetchData(controller.signal), 3 * 60 * 1000)
+    return () => {
+      controller.abort()
+      clearInterval(interval)
+    }
   }, [])
 
-  return { data, loading, error, refetch: fetchData }
+  return { data, loading, error, refetch: () => fetchData() }
 }

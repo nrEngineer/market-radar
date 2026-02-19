@@ -1,44 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { supabaseAdmin, isSupabaseConfigured } from '@/server/db/client'
+import { validateCronToken } from '@/server/auth-utils'
+import { notifyError } from '@/server/discord-notify'
 
-// Supabase client with service role key for API access (with fallbacks for build)
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-key'
-
-const supabase = createClient(supabaseUrl, supabaseKey)
-
-// Helper function to get real-time stats from database
 async function getStats() {
   try {
     const [opportunities, trends, categories] = await Promise.all([
-      supabase.from('opportunities').select('*', { count: 'exact' }),
-      supabase.from('trends').select('*', { count: 'exact' }),
-      supabase.from('categories').select('*', { count: 'exact' })
+      supabaseAdmin.from('opportunities').select('*', { count: 'exact', head: true }),
+      supabaseAdmin.from('trends').select('*', { count: 'exact', head: true }),
+      supabaseAdmin.from('categories').select('*', { count: 'exact', head: true })
     ])
 
     return {
       totalOpportunities: opportunities.count || 0,
       totalTrends: trends.count || 0,
       totalCategories: categories.count || 0,
-      avgScore: opportunities.data && opportunities.data.length > 0 
-        ? Math.round(opportunities.data.reduce((sum, opp) => sum + (opp.scores?.overall || 0), 0) / opportunities.data.length)
-        : 0
+      avgScore: 0
     }
   } catch (error) {
     console.error('Stats fetch error:', error)
-    return {
-      totalOpportunities: 0,
-      totalTrends: 0, 
-      totalCategories: 0,
-      avgScore: 0
-    }
+    return { totalOpportunities: 0, totalTrends: 0, totalCategories: 0, avgScore: 0 }
   }
 }
 
-// Helper function to get highlights from top opportunities
 async function getHighlights() {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('opportunities')
       .select('id, title, category, scores')
       .order('scores->overall', { ascending: false })
@@ -51,7 +38,7 @@ async function getHighlights() {
       title: opp.title,
       category: opp.category,
       score: opp.scores?.overall || 0,
-      change: '+' + Math.floor(Math.random() * 20 + 5) + '%' // TODO: Calculate real change
+      change: null
     })) || []
   } catch (error) {
     console.error('Highlights fetch error:', error)
@@ -59,10 +46,9 @@ async function getHighlights() {
   }
 }
 
-// Helper function to get category data
 async function getCategories() {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('categories')
       .select('name, total_apps, growth')
       .order('total_apps', { ascending: false })
@@ -81,10 +67,9 @@ async function getCategories() {
   }
 }
 
-// Helper function to get collection status
 async function getCollectionStatus() {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('collection_logs')
       .select('source, status, data_count, timestamp')
       .order('timestamp', { ascending: false })
@@ -103,21 +88,15 @@ async function getCollectionStatus() {
     }
   } catch (error) {
     console.error('Collection status fetch error:', error)
-    return {
-      timestamp: new Date().toISOString(),
-      sources: []
-    }
+    return { timestamp: new Date().toISOString(), sources: [] }
   }
 }
 
-// Main data API endpoint
 export async function GET(request: NextRequest) {
   try {
-    // Check if Supabase is properly configured
-    if (supabaseUrl === 'https://placeholder.supabase.co' || supabaseKey === 'placeholder-key') {
+    if (!isSupabaseConfigured()) {
       return NextResponse.json({
-        error: 'Database not configured',
-        message: 'Please configure Supabase environment variables'
+        error: 'Service temporarily unavailable'
       }, { status: 503 })
     }
 
@@ -125,69 +104,40 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type')
 
     switch (type) {
-      case 'stats': {
-        const stats = await getStats()
-        return NextResponse.json(stats)
-      }
-
-      case 'highlights': {
-        const highlights = await getHighlights()
-        return NextResponse.json(highlights)
-      }
-
-      case 'categories': {
-        const categories = await getCategories()
-        return NextResponse.json(categories)
-      }
-
-      case 'collection-status': {
-        const collectionStatus = await getCollectionStatus()
-        return NextResponse.json(collectionStatus)
-      }
-
+      case 'stats':
+        return NextResponse.json(await getStats())
+      case 'highlights':
+        return NextResponse.json(await getHighlights())
+      case 'categories':
+        return NextResponse.json(await getCategories())
+      case 'collection-status':
+        return NextResponse.json(await getCollectionStatus())
       default: {
-        // Return comprehensive data for dashboard
         const [stats, highlights, categories, collectionStatus] = await Promise.all([
-          getStats(),
-          getHighlights(),
-          getCategories(),
-          getCollectionStatus()
+          getStats(), getHighlights(), getCategories(), getCollectionStatus()
         ])
-
         return NextResponse.json({
           lastUpdate: new Date().toISOString(),
-          stats,
-          highlights,
-          categories,
-          recentCollection: collectionStatus
+          stats, highlights, categories, recentCollection: collectionStatus
         })
       }
     }
   } catch (error) {
     console.error('Data API error:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch data', details: error instanceof Error ? error.message : 'Unknown error' },
-      { status: 500 }
-    )
+    notifyError('data', error instanceof Error ? error.message : 'Unknown error').catch(() => {})
+    return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 })
   }
 }
 
-// Data update endpoint (for internal use)
 export async function POST(request: NextRequest) {
   try {
     const authToken = request.headers.get('Authorization')
-    
-    // Environment variable-based authentication
-    const expectedToken = `Bearer ${process.env.CRON_SECRET_TOKEN || 'default-dev-token'}`
-    if (authToken !== expectedToken) {
+    if (!validateCronToken(authToken)) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     const updates = await request.json()
-    
-    // Process updates (implementation depends on data structure)
-    // This would typically update the database with new collected data
-    
+
     return NextResponse.json({
       success: true,
       updated: Object.keys(updates),
@@ -195,9 +145,7 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     console.error('Data update error:', error)
-    return NextResponse.json(
-      { error: 'Failed to update data', details: error instanceof Error ? error.message : 'Unknown error' },
-      { status: 500 }
-    )
+    notifyError('data-update', error instanceof Error ? error.message : 'Unknown error').catch(() => {})
+    return NextResponse.json({ error: 'Failed to update data' }, { status: 500 })
   }
 }

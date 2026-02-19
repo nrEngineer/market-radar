@@ -5,8 +5,8 @@ import { FiveW1HCard } from '@/components/FiveW1HCard'
 import { ProvenanceCard } from '@/components/ProvenanceCard'
 import { MiniBarChart } from '@/components/MiniChart'
 import { AnimatedSection } from '@/components/motion'
-import { trends } from '@/lib/data'
-import { getAdoptionLabel } from '@/lib/utils'
+import { trends } from '@/data'
+import { getAdoptionLabel } from '@/domain/formatting'
 
 export default function TrendsPage() {
   return (
