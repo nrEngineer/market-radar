@@ -616,7 +616,7 @@ export class RealDataSeeder {
       .insert({
         source: 'RealDataSeeder',
         status: 'success',
-        items_collected: summary.totalDataPoints,
+        data_count: summary.totalDataPoints,
         metadata: summary,
         created_at: new Date().toISOString()
       })

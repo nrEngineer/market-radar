@@ -86,8 +86,8 @@ async function getCollectionStatus() {
   try {
     const { data, error } = await supabase
       .from('collection_logs')
-      .select('source, status, items_collected, created_at')
-      .order('created_at', { ascending: false })
+      .select('source, status, data_count, timestamp')
+      .order('timestamp', { ascending: false })
       .limit(5)
 
     if (error) throw error
@@ -97,8 +97,8 @@ async function getCollectionStatus() {
       sources: data?.map(log => ({
         name: log.source,
         status: log.status,
-        items: log.items_collected || 0,
-        lastRun: new Date(log.created_at).toLocaleString('ja-JP')
+        items: log.data_count || 0,
+        lastRun: new Date(log.timestamp).toLocaleString('ja-JP')
       })) || []
     }
   } catch (error) {
