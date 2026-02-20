@@ -12,17 +12,17 @@ const pricingPlans = [
     name: 'Free',
     price: 0,
     popular: false,
-    description: '個人での軽い市場調査に最適',
+    description: '個人開発のアイデア検証に',
     features: [
-      '月5回の基本分析',
-      'トレンドデータ閲覧',
-      'コミュニティサポート',
-      '基本的なレポート'
+      '月5回の AI リサーチ',
+      'トレンド・機会データ閲覧',
+      '基本的な市場分析レポート',
+      'コミュニティサポート'
     ],
     limitations: [
-      'AIレポート生成なし',
+      '詳細な競合分析なし',
       'API アクセスなし',
-      '詳細分析制限あり'
+      'エクスポート制限あり'
     ]
   },
   {
@@ -30,18 +30,18 @@ const pricingPlans = [
     name: 'Premium',
     price: 5000,
     popular: true,
-    description: 'スタートアップ・個人事業主向け',
+    description: 'SaaS を本気で作るインディーハッカー向け',
     features: [
-      '月100回の高度分析',
-      'AI powered レポート生成',
-      '詳細競合分析',
-      '市場予測・トレンド分析',
-      'メールサポート',
-      'データエクスポート機能'
+      '月100回の AI リサーチ',
+      'AI コンサルレポート生成',
+      '詳細競合分析・モート分析',
+      'TAM/SAM/SOM 市場規模算出',
+      'Go-to-Market 戦略提案',
+      'PDF/PNG エクスポート'
     ],
     limitations: [
       'API アクセスは制限あり',
-      'カスタムダッシュボードなし'
+      'チーム機能なし'
     ]
   },
   {
@@ -49,14 +49,14 @@ const pricingPlans = [
     name: 'Professional', 
     price: 15000,
     popular: false,
-    description: '中小企業・コンサルタント向け',
+    description: 'SaaS チーム・小規模法人向け',
     features: [
-      '無制限分析・レポート',
+      '無制限 AI リサーチ・レポート',
       'REST API フルアクセス',
       'カスタムダッシュボード',
-      'ホワイトラベル機能',
+      '価格戦略・収益モデル分析',
       'リアルタイムデータ更新',
-      '優先カスタマーサポート',
+      '優先サポート',
       'チーム機能（5ユーザー）'
     ],
     limitations: [
@@ -68,10 +68,10 @@ const pricingPlans = [
     name: 'Enterprise',
     price: 50000,
     popular: false,
-    description: '大企業・投資ファンド向け',
+    description: 'スタジオ・投資ファンド・大企業向け',
     features: [
       '全機能無制限アクセス',
-      '専用API・カスタム統合',
+      '専用 API・カスタム統合',
       '完全ホワイトラベル',
       'SSO・セキュリティ統合',
       '専任カスタマーサクセス',
@@ -251,14 +251,14 @@ export default function PricingPage() {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
-              McKinsey級分析を
+              コンサルを雇わず
               <br />
-              <span className="text-blue-600">1/10のコストで</span>
+              <span className="text-blue-600">コンサル級の判断を</span>
             </h1>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-              プロフェッショナル品質の市場分析・競合調査・投資判断支援を
+              マーケター・コンサルが社内にいなくても、
               <br />
-              AI駆動で瞬時に提供。コンサルタント要らずの時代へ。
+              AI があなたの SaaS 事業を戦略的にサポート。
             </p>
           </motion.div>
         </div>
@@ -267,23 +267,23 @@ export default function PricingPage() {
         <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 mb-16">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-slate-900 mb-4">
-              💰 従来コストとの比較
+              💰 コンサルを雇う vs Market Radar
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
               <div className="bg-white rounded-lg p-6 text-center">
-                <h3 className="text-lg font-bold text-slate-700 mb-2">McKinsey</h3>
+                <h3 className="text-lg font-bold text-slate-700 mb-2">コンサル会社</h3>
                 <div className="text-3xl font-bold text-red-600 mb-2">¥500万</div>
                 <div className="text-sm text-slate-500">3ヶ月プロジェクト</div>
               </div>
               <div className="bg-white rounded-lg p-6 text-center">
-                <h3 className="text-lg font-bold text-slate-700 mb-2">フリーランス</h3>
-                <div className="text-3xl font-bold text-orange-600 mb-2">¥50万</div>
-                <div className="text-sm text-slate-500">1ヶ月調査</div>
+                <h3 className="text-lg font-bold text-slate-700 mb-2">マーケター採用</h3>
+                <div className="text-3xl font-bold text-orange-600 mb-2">¥50万/月</div>
+                <div className="text-sm text-slate-500">正社員 or 業務委託</div>
               </div>
               <div className="bg-white rounded-lg p-6 text-center border-2 border-blue-500">
                 <h3 className="text-lg font-bold text-blue-600 mb-2">Market Radar</h3>
-                <div className="text-3xl font-bold text-blue-600 mb-2">¥5,000</div>
-                <div className="text-sm text-slate-500">リアルタイム・無制限</div>
+                <div className="text-3xl font-bold text-blue-600 mb-2">¥5,000/月</div>
+                <div className="text-sm text-slate-500">AI コンサル・即時回答</div>
                 <Badge variant="emerald">99%コストダウン</Badge>
               </div>
             </div>

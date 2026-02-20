@@ -11,14 +11,15 @@ export interface DashboardCardConfig {
 }
 
 const DEFAULT_CARDS: DashboardCardConfig[] = [
+  { id: 'fiveW1H', label: '5W1H 概要', visible: true },
   { id: 'metrics', label: 'キーメトリクス', visible: true },
-  { id: 'insights', label: 'AI市場インサイト', visible: true },
-  { id: 'trends', label: 'トレンドハイライト', visible: true },
-  { id: 'opportunities', label: 'トップ機会', visible: true },
-  { id: 'topics', label: 'トレンドトピック', visible: true },
-  { id: 'categories', label: 'カテゴリ成長', visible: true },
-  { id: 'sources', label: 'データソース', visible: true },
-  { id: 'fivew1h', label: '5W1H', visible: true },
+  { id: 'insights', label: 'AI インサイト', visible: true },
+  { id: 'highlights', label: '注目プロダクト', visible: true },
+  { id: 'opportunities', label: '事業機会 Top 3', visible: true },
+  { id: 'trends', label: '急上昇トレンド', visible: true },
+  { id: 'categories', label: 'カテゴリ別成長率', visible: true },
+  { id: 'dataSources', label: 'データ収集状況', visible: true },
+  { id: 'provenance', label: 'データ来歴', visible: true },
 ]
 
 export function useDashboardSettings() {
