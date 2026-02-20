@@ -2,106 +2,108 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin, isSupabaseConfigured } from '@/server/db/client'
 import { validateCronToken } from '@/server/auth-utils'
 import { notifyError } from '@/server/discord-notify'
+import { opportunities } from '@/data/opportunities'
+import { trends } from '@/data/trends'
 
-async function getStats() {
-  try {
-    const [opportunities, trends, categories] = await Promise.all([
-      supabaseAdmin.from('opportunities').select('*', { count: 'exact', head: true }),
-      supabaseAdmin.from('trends').select('*', { count: 'exact', head: true }),
-      supabaseAdmin.from('categories').select('*', { count: 'exact', head: true })
-    ])
+// ── Supabase-backed queries (used when DB is configured) ────
 
-    return {
-      totalOpportunities: opportunities.count || 0,
-      totalTrends: trends.count || 0,
-      totalCategories: categories.count || 0,
-      avgScore: 0
-    }
-  } catch (error) {
-    console.error('Stats fetch error:', error)
-    return { totalOpportunities: 0, totalTrends: 0, totalCategories: 0, avgScore: 0 }
+async function getStatsFromDB() {
+  const [opps, trds, cats] = await Promise.all([
+    supabaseAdmin.from('opportunities').select('*', { count: 'exact', head: true }),
+    supabaseAdmin.from('trends').select('*', { count: 'exact', head: true }),
+    supabaseAdmin.from('categories').select('*', { count: 'exact', head: true })
+  ])
+  return {
+    totalOpportunities: opps.count || 0,
+    totalTrends: trds.count || 0,
+    totalCategories: cats.count || 0,
+    avgScore: 0
   }
 }
 
-async function getHighlights() {
-  try {
-    const { data, error } = await supabaseAdmin
-      .from('opportunities')
-      .select('id, title, category, scores')
-      .order('scores->overall', { ascending: false })
-      .limit(5)
+async function getHighlightsFromDB() {
+  const { data, error } = await supabaseAdmin
+    .from('opportunities')
+    .select('id, title, category, scores')
+    .order('scores->overall', { ascending: false })
+    .limit(5)
+  if (error) throw error
+  return data?.map(opp => ({
+    id: opp.id, title: opp.title, category: opp.category,
+    score: opp.scores?.overall || 0, change: null
+  })) || []
+}
 
-    if (error) throw error
+async function getCategoriesFromDB() {
+  const { data, error } = await supabaseAdmin
+    .from('categories')
+    .select('name, total_apps, growth')
+    .order('total_apps', { ascending: false })
+    .limit(6)
+  if (error) throw error
+  return data?.map(cat => ({
+    name: cat.name, apps: cat.total_apps || 0, growth: cat.growth || '+0%'
+  })) || []
+}
 
-    return data?.map(opp => ({
+// ── Static data fallback (used when Supabase is not configured) ──
+
+function getStatsFromStatic() {
+  const total = opportunities.length
+  const avgScore = total > 0
+    ? Math.round(opportunities.reduce((sum, o) => sum + o.scores.overall, 0) / total)
+    : 0
+
+  const categorySet = new Set(opportunities.map(o => o.category))
+
+  return {
+    totalOpportunities: total,
+    totalTrends: trends.length,
+    totalCategories: categorySet.size,
+    avgScore
+  }
+}
+
+function getHighlightsFromStatic() {
+  return [...opportunities]
+    .sort((a, b) => b.scores.overall - a.scores.overall)
+    .slice(0, 5)
+    .map(opp => ({
       id: opp.id,
       title: opp.title,
       category: opp.category,
-      score: opp.scores?.overall || 0,
+      score: opp.scores.overall,
       change: null
-    })) || []
-  } catch (error) {
-    console.error('Highlights fetch error:', error)
-    return []
-  }
+    }))
 }
 
-async function getCategories() {
-  try {
-    const { data, error } = await supabaseAdmin
-      .from('categories')
-      .select('name, total_apps, growth')
-      .order('total_apps', { ascending: false })
-      .limit(6)
-
-    if (error) throw error
-
-    return data?.map(cat => ({
-      name: cat.name,
-      apps: cat.total_apps || 0,
-      growth: cat.growth || '+0%'
-    })) || []
-  } catch (error) {
-    console.error('Categories fetch error:', error)
-    return []
-  }
-}
-
-async function getCollectionStatus() {
-  try {
-    const { data, error } = await supabaseAdmin
-      .from('collection_logs')
-      .select('source, status, data_count, timestamp')
-      .order('timestamp', { ascending: false })
-      .limit(5)
-
-    if (error) throw error
-
-    return {
-      timestamp: new Date().toISOString(),
-      sources: data?.map(log => ({
-        name: log.source,
-        status: log.status,
-        items: log.data_count || 0,
-        lastRun: new Date(log.timestamp).toLocaleString('ja-JP')
-      })) || []
+function getCategoriesFromStatic() {
+  const catMap = new Map<string, { count: number; growth: string }>()
+  for (const opp of opportunities) {
+    const prev = catMap.get(opp.category)
+    if (!prev) {
+      catMap.set(opp.category, { count: 1, growth: opp.market.growth })
+    } else {
+      catMap.set(opp.category, { count: prev.count + 1, growth: prev.growth })
     }
-  } catch (error) {
-    console.error('Collection status fetch error:', error)
-    return { timestamp: new Date().toISOString(), sources: [] }
   }
+  return [...catMap.entries()]
+    .sort(([, a], [, b]) => b.count - a.count)
+    .slice(0, 6)
+    .map(([name, { count, growth }]) => ({ name, apps: count, growth }))
 }
+
+// ── Main handler ────────────────────────────────────────────
 
 export async function GET(request: NextRequest) {
   try {
-    if (!isSupabaseConfigured()) {
-      return NextResponse.json({
-        error: 'Service temporarily unavailable'
-      }, { status: 503 })
-    }
-
     const { searchParams } = new URL(request.url)
     const type = searchParams.get('type')
+    const useDB = isSupabaseConfigured()
+
+    const getStats = useDB ? getStatsFromDB : async () => getStatsFromStatic()
+    const getHighlights = useDB ? getHighlightsFromDB : async () => getHighlightsFromStatic()
+    const getCategories = useDB ? getCategoriesFromDB : async () => getCategoriesFromStatic()
 
     switch (type) {
       case 'stats':
@@ -111,14 +113,22 @@ export async function GET(request: NextRequest) {
       case 'categories':
         return NextResponse.json(await getCategories())
       case 'collection-status':
-        return NextResponse.json(await getCollectionStatus())
+        return NextResponse.json({
+          timestamp: new Date().toISOString(),
+          sources: [
+            { name: 'Product Hunt', status: 'ready', items: 0, lastRun: 'API接続待ち' },
+            { name: 'App Store', status: 'ready', items: 0, lastRun: 'API接続待ち' },
+            { name: 'Hacker News', status: 'ready', items: 0, lastRun: 'API接続待ち' },
+          ]
+        })
       default: {
-        const [stats, highlights, categories, collectionStatus] = await Promise.all([
-          getStats(), getHighlights(), getCategories(), getCollectionStatus()
+        const [stats, highlights, categories] = await Promise.all([
+          getStats(), getHighlights(), getCategories()
         ])
         return NextResponse.json({
           lastUpdate: new Date().toISOString(),
-          stats, highlights, categories, recentCollection: collectionStatus
+          stats, highlights, categories,
+          dataSource: useDB ? 'supabase' : 'static'
         })
       }
     }
@@ -137,7 +147,6 @@ export async function POST(request: NextRequest) {
     }
 
     const updates = await request.json()
-
     return NextResponse.json({
       success: true,
       updated: Object.keys(updates),

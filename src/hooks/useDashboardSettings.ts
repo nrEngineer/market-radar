@@ -18,6 +18,7 @@ const DEFAULT_CARDS: DashboardCardConfig[] = [
   { id: 'opportunities', label: '事業機会 Top 3', visible: true },
   { id: 'trends', label: '急上昇トレンド', visible: true },
   { id: 'categories', label: 'カテゴリ別成長率', visible: true },
+  { id: 'liveSignals', label: 'ライブ市場シグナル', visible: true },
   { id: 'dataSources', label: 'データ収集状況', visible: true },
   { id: 'provenance', label: 'データ来歴', visible: true },
 ]

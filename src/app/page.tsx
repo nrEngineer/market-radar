@@ -14,6 +14,7 @@ import { DashboardSettings } from '@/components/DashboardSettings'
 import { AlertSettings } from '@/components/AlertSettings'
 import { ExportButton } from '@/components/ExportButton'
 import { useDashboardSettings } from '@/hooks/useDashboardSettings'
+import { useLiveSignals } from '@/hooks/useLiveSignals'
 import { opportunities, analyticsSummary, defaultProvenance, trends } from '@/data'
 import { SparkLine } from '@/components/MiniChart'
 import { Badge } from '@/components/Badge'
@@ -31,12 +32,13 @@ const dashboardFiveW1H = {
 export default function MarketRadarDashboard() {
   const { data, loading, error, refetch } = useMarketData()
   const { cards, toggleCard, resetAll, isVisible } = useDashboardSettings()
+  const { data: liveSignals, loading: liveLoading, refetch: refetchLive } = useLiveSignals()
 
   const dataSources = [
-    { name: 'Product Hunt', count: data?.highlights?.length ?? 3, active: true, icon: '🚀' },
-    { name: 'App Store', count: data?.categories?.length ?? 4, active: true, icon: '📱' },
-    { name: 'Hacker News', count: 15, active: true, icon: '🔶' },
-    { name: 'AI 分析エンジン', count: 847, active: true, icon: '🧠' },
+    { name: 'Product Hunt', count: liveSignals?.totalDataPoints ?? 0, active: !!liveSignals, icon: '🚀' },
+    { name: 'App Store', count: liveSignals?.sources.appStore.items ?? 0, active: liveSignals?.sources.appStore.status === 'success', icon: '📱' },
+    { name: 'Hacker News', count: liveSignals?.sources.hackerNews.items ?? 0, active: liveSignals?.sources.hackerNews.status === 'success', icon: '🔶' },
+    { name: 'AI 分析エンジン', count: analyticsSummary.dataPointsCollected, active: true, icon: '🧠' },
   ]
 
   return (
@@ -391,6 +393,99 @@ export default function MarketRadarDashboard() {
                 ))
               ) : null}
             </div>
+          </AnimatedSection>
+        )}
+
+        {/* ═══ Live Market Signals ═══ */}
+        {isVisible('liveSignals') && (
+          <AnimatedSection className="mb-10" delay={0.17}>
+            <SectionHeader
+              title="ライブ市場シグナル"
+              subtitle="HN・App Store からリアルタイム取得"
+              icon={<span className="text-base">📡</span>}
+              action={
+                <button
+                  onClick={refetchLive}
+                  disabled={liveLoading}
+                  className="text-[12px] font-medium text-[#3d5a99] hover:text-[#2c4377] transition-colors disabled:opacity-40"
+                >
+                  {liveLoading ? '取得中…' : '再取得 →'}
+                </button>
+              }
+            />
+            {liveLoading && !liveSignals ? (
+              <div className="grid gap-3 sm:grid-cols-2">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="glass-card h-16 shimmer" />
+                ))}
+              </div>
+            ) : liveSignals ? (
+              <div className="space-y-4">
+                {/* Hot Categories */}
+                {liveSignals.hotCategories.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {liveSignals.hotCategories.map((cat) => (
+                      <span key={cat.category} className="inline-flex items-center gap-1.5 rounded-full bg-[#3d5a99]/8 px-3 py-1 text-[11px] font-semibold text-[#2c4377] border border-[#3d5a99]/15">
+                        {cat.category}
+                        <span className="rounded-full bg-[#3d5a99]/15 px-1.5 py-0.5 text-[10px]">{cat.count}</span>
+                      </span>
+                    ))}
+                  </div>
+                )}
+                {/* Tech Signals from HN */}
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {liveSignals.techSignals.slice(0, 6).map((signal, i) => (
+                    <a
+                      key={i}
+                      href={String(signal.url)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="glass-card flex items-start gap-3 p-4 hover:border-[#3d5a99]/20 transition-colors group"
+                    >
+                      <span className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded bg-orange-50 text-[10px] font-bold text-orange-500 tabular-nums">
+                        {signal.score}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[12px] leading-relaxed text-slate-700 group-hover:text-[#3d5a99] transition-colors line-clamp-2">
+                          {signal.title}
+                        </p>
+                        <div className="mt-1.5 flex items-center gap-2">
+                          <Badge variant="ghost" size="sm">{signal.category}</Badge>
+                          <span className="text-[10px] text-slate-300">🔶 {signal.source}</span>
+                        </div>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+                {/* App Store Signals */}
+                {liveSignals.appSignals.length > 0 && (
+                  <div>
+                    <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">📱 App Store 注目アプリ</p>
+                    <div className="grid gap-2 sm:grid-cols-3">
+                      {liveSignals.appSignals.slice(0, 6).map((app, i) => (
+                        <div key={i} className="glass-card p-3">
+                          <p className="text-[12px] font-medium text-slate-700 line-clamp-1">{app.name}</p>
+                          <div className="mt-1 flex items-center gap-2">
+                            <span className="text-[10px] text-amber-500">★ {app.rating}</span>
+                            <span className="text-[10px] text-slate-300">·</span>
+                            <span className="text-[10px] text-slate-400">{app.price}</span>
+                            <span className="text-[10px] text-slate-300">·</span>
+                            <span className="text-[10px] text-slate-400">{app.category}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <p className="text-[10px] text-slate-300 text-right">
+                  最終取得: {new Date(liveSignals.timestamp).toLocaleString('ja-JP')} · {liveSignals.totalDataPoints} データポイント
+                </p>
+              </div>
+            ) : (
+              <div className="glass-card p-6 text-center">
+                <p className="text-[13px] text-slate-400">ライブデータの取得に失敗しました。再取得ボタンをお試しください。</p>
+              </div>
+            )}
           </AnimatedSection>
         )}
 
