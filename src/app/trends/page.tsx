@@ -1,11 +1,12 @@
 'use client'
 
+import Link from 'next/link'
 import { PageLayout } from '@/components/PageLayout'
 import { FiveW1HCard } from '@/components/FiveW1HCard'
 import { ProvenanceCard } from '@/components/ProvenanceCard'
 import { MiniBarChart } from '@/components/MiniChart'
 import { AnimatedSection } from '@/components/motion'
-import { trends } from '@/data'
+import { trends, opportunities } from '@/data'
 import { getAdoptionLabel } from '@/domain/formatting'
 
 export default function TrendsPage() {
@@ -122,6 +123,34 @@ export default function TrendsPage() {
                 ))}
               </div>
             </div>
+
+            {/* Related Opportunities */}
+            {(() => {
+              const related = opportunities.filter(opp =>
+                opp.tags.some(tag =>
+                  trend.name.toLowerCase().includes(tag.toLowerCase()) ||
+                  trend.relatedTrends.some(rt => rt.toLowerCase().includes(tag.toLowerCase()))
+                ) || trend.category.toLowerCase().includes(opp.category.toLowerCase())
+              ).slice(0, 3)
+              if (related.length === 0) return null
+              return (
+                <div className="border-b border-slate-100 p-6">
+                  <p className="text-[12px] font-semibold text-slate-500 mb-3">🎯 関連する市場機会</p>
+                  <div className="grid gap-2 sm:grid-cols-3">
+                    {related.map(opp => (
+                      <Link key={opp.id} href={`/opportunities/${opp.id}`} className="group rounded-xl border border-slate-100 bg-slate-50 p-3 hover:border-[#3d5a99]/30 hover:bg-[#3d5a99]/5 transition-colors">
+                        <p className="text-[12px] font-semibold text-slate-800 group-hover:text-[#3d5a99] transition-colors">{opp.title}</p>
+                        <div className="mt-1.5 flex items-center gap-2 text-[11px] text-slate-400">
+                          <span>スコア: <strong className="text-[#3d5a99]">{opp.scores.overall}</strong></span>
+                          <span>·</span>
+                          <span>{opp.revenue.estimated}</span>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )
+            })()}
 
             {/* 5W1H */}
             <div className="p-6">

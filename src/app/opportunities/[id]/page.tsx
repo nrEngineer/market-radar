@@ -1,6 +1,6 @@
 'use client'
 
-import { use } from 'react'
+import { use, useRef } from 'react'
 import { notFound } from 'next/navigation'
 import { PageLayout } from '@/components/PageLayout'
 import { FiveW1HCard } from '@/components/FiveW1HCard'
@@ -8,15 +8,19 @@ import { ProvenanceCard } from '@/components/ProvenanceCard'
 import { MarketSizingCard } from '@/components/MarketSizingCard'
 import { RiskMatrix, ScenarioAnalysis } from '@/components/RiskMatrix'
 import { ScoreBar } from '@/components/ScoreBar'
-// Badge component available from '@/components/Badge'
+import { ExportButton } from '@/components/ExportButton'
+import { WatchlistButton } from '@/components/WatchlistButton'
 import { MiniBarChart } from '@/components/MiniChart'
 import { AnimatedSection } from '@/components/motion'
 import { opportunities } from '@/data'
 import { formatCurrency } from '@/domain/formatting'
+import { useWatchlist } from '@/hooks/useWatchlist'
 
 export default function OpportunityDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
   const opp = opportunities.find((o) => o.id === id)
+  const exportRef = useRef<HTMLDivElement>(null)
+  const { isWatched, toggle: toggleWatch } = useWatchlist()
 
   if (!opp) {
     notFound()
@@ -33,6 +37,8 @@ export default function OpportunityDetailPage({ params }: { params: Promise<{ id
       ]}
       actions={
         <div className="flex items-center gap-2">
+          <WatchlistButton isWatched={isWatched(opp.id)} onToggle={() => toggleWatch(opp.id)} size="md" />
+          <ExportButton targetRef={exportRef} filename={`market-radar-${opp.id}`} />
           <span className={`rounded-full px-3 py-1 text-[12px] font-semibold border ${
             opp.status === 'validated' ? 'bg-emerald-50 text-emerald-700 border-emerald-200/60' :
             opp.status === 'researching' ? 'bg-[#3d5a99]/8 text-[#2c4377] border-[#3d5a99]/15' :
@@ -43,6 +49,7 @@ export default function OpportunityDetailPage({ params }: { params: Promise<{ id
         </div>
       }
     >
+      <div ref={exportRef} id="export-target">
       {/* ═══ Overall Score & Key Metrics ═══ */}
       <AnimatedSection className="mb-8">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -391,6 +398,7 @@ export default function OpportunityDetailPage({ params }: { params: Promise<{ id
           </span>
         ))}
       </div>
+      </div>{/* end export-target */}
     </PageLayout>
   )
 }
