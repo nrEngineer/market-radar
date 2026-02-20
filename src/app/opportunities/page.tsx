@@ -30,7 +30,7 @@ export default function OpportunitiesListPage() {
   return (
     <PageLayout
       title="市場機会一覧"
-      subtitle="AI分析で検出・スコアリングされた全事業機会"
+      subtitle="多次元スコアリングで評価された全20件の事業機会"
       icon="🎯"
       breadcrumbs={[{ label: '市場機会' }]}
       actions={

@@ -2,8 +2,8 @@ import type { NavItem } from '@/domain/types'
 
 export const navItems: NavItem[] = [
   { label: 'ダッシュボード', href: '/', icon: '📊', description: '全体概要' },
-  { label: 'AIリサーチ', href: '/research', icon: '🧠', badge: 'NEW', description: 'AIコンサルタントに相談' },
-  { label: '事業機会', href: '/opportunities', icon: '🎯', badge: '12', description: 'スコアリング済み事業機会' },
+  { label: 'リサーチ', href: '/research', icon: '🧠', badge: 'NEW', description: 'データベース検索型マーケット分析' },
+  { label: '事業機会', href: '/opportunities', icon: '🎯', badge: '20', description: 'スコアリング済み事業機会' },
   { label: 'トレンド', href: '/trends', icon: '📈', description: 'トレンド分析・予測' },
   { label: '競合分析', href: '/companies', icon: '🏢', description: '競合マッピング' },
   { label: 'カテゴリ', href: '/categories/ai-tools', icon: '📱', description: 'カテゴリ別深掘り' },

@@ -13,14 +13,14 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Market Radar — SaaS ビルダーのための AI コンサルタント',
+    default: 'Market Radar — SaaS ビルダーのためのマーケットインテリジェンス',
     template: '%s | Market Radar',
   },
-  description: 'コンサルなしで事業判断。AI が市場分析・競合調査・TAM/SAM/SOM・Go-to-Market 戦略をリアルタイムに提供。インディーハッカー・SaaS ビルダー向け。',
-  keywords: ['SaaS', 'indie hacker', 'market analysis', 'AI consultant', 'TAM SAM SOM', 'competitive analysis', 'go to market', 'startup'],
+  description: 'コンサルなしで事業判断。市場分析・競合調査・TAM/SAM/SOM・Go-to-Market 戦略データをリアルタイムに提供。インディーハッカー・SaaS ビルダー向け。',
+  keywords: ['SaaS', 'indie hacker', 'market analysis', 'market intelligence', 'TAM SAM SOM', 'competitive analysis', 'go to market', 'startup'],
   openGraph: {
-    title: 'Market Radar — SaaS ビルダーのための AI コンサルタント',
-    description: 'コンサルなしで事業判断。AI が市場分析・競合調査・収益予測をリアルタイムに提供。',
+    title: 'Market Radar — SaaS ビルダーのためのマーケットインテリジェンス',
+    description: 'コンサルなしで事業判断。市場分析・競合調査・収益予測データをリアルタイムに提供。',
     type: 'website',
     locale: 'ja_JP',
     siteName: 'Market Radar',
@@ -28,8 +28,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Market Radar — SaaS ビルダーのための AI コンサルタント',
-    description: 'コンサルなしで事業判断。AI が市場分析・競合調査・Go-to-Market 戦略を瞬時に提供。',
+    title: 'Market Radar — SaaS ビルダーのためのマーケットインテリジェンス',
+    description: 'コンサルなしで事業判断。市場分析・競合調査・Go-to-Market 戦略データを瞬時に提供。',
   },
 }
 

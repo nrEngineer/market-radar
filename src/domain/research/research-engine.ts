@@ -145,6 +145,8 @@ export function executeCustomResearch(
       return buildCustomerResearch(query, topOpps, baseResults)
     case 'technology':
       return buildTechResearch(query, topOpps, baseResults)
+    case 'regulation':
+      return buildRegulationResearch(query, topOpps, baseResults)
     default:
       return buildGeneralResearch(query, topOpps, topTrends, baseResults)
   }
@@ -426,6 +428,47 @@ function buildTechResearch(
     ...base,
     confidence: 85,
     summary: `「${query}」に関する技術分析。${opps.length}件の事業機会の技術スタック・開発コスト・実現可能性を比較。`,
+    findings,
+    insights,
+  }
+}
+
+function buildRegulationResearch(
+  query: string, opps: ScoredOpp[], base: BaseResults
+): ResearchResult {
+  const findings: ResearchFinding[] = []
+
+  for (const { opp } of opps.slice(0, 4)) {
+    const regulationRisks = opp.risks.factors.filter(f =>
+      /法規|規制|コンプライアンス|個人情報|GDPR|景表法|特定商取引|資金決済|薬機法|医療|金融|免許/.test(f.name + f.mitigation)
+    )
+
+    findings.push({
+      title: `${opp.title}: 規制環境`,
+      description: regulationRisks.length > 0
+        ? `該当する規制リスク: ${regulationRisks.map(r => `${r.name}（影響度 ${r.impact}/5, 発生確率 ${r.probability}%）`).join('。')}。${regulationRisks[0].mitigation}`
+        : `${opp.category}カテゴリ。主要リスク: ${opp.risks.factors.slice(0, 2).map(f => f.name).join('、')}。リスクレベル: ${opp.risks.level === 'low' ? '低' : opp.risks.level === 'medium' ? '中' : '高'}。`,
+      confidence: regulationRisks.length > 0 ? 82 : 68
+    })
+  }
+
+  findings.push({
+    title: 'SaaS 共通の法的要件（日本市場）',
+    description: '特定商取引法に基づく表記、個人情報保護法（プライバシーポリシー）、利用規約の整備が必須。決済機能を含む場合は資金決済法の確認が必要。越境サービスの場合はGDPR対応も検討。',
+    confidence: 92
+  })
+
+  const insights = [
+    '個人情報を扱う場合、プライバシーポリシーの整備と個人情報保護委員会への届出確認が必要',
+    '月額課金サービスは特定商取引法の「定期購入」規定に該当。解約方法の明示が義務',
+    'MVP段階では利用規約 + プライバシーポリシー + 特商法表記の3点を最低限整備',
+    '医療・金融・教育分野は業法の確認が必須。該当しない場合は比較的規制が緩い',
+  ]
+
+  return {
+    ...base,
+    confidence: 75,
+    summary: `「${query}」に関する規制・法的要件を分析。${opps.length}件の関連事業機会のリスクファクターと、日本のSaaS事業における共通法的要件を調査。`,
     findings,
     insights,
   }

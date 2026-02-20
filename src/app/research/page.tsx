@@ -82,17 +82,17 @@ export default function CustomResearchPage() {
 
   return (
     <PageLayout
-      title="AI コンサルタント"
-      subtitle="コンサルに聞くように、何でも質問。市場分析・競合調査・戦略立案を AI がサポート"
+      title="マーケットリサーチ"
+      subtitle="質問を入力すると、20件の事業機会データベースとトレンド分析から関連情報を検索・レポート生成"
       icon="🧠"
-      breadcrumbs={[{ label: 'AI リサーチ' }]}
+      breadcrumbs={[{ label: 'マーケットリサーチ' }]}
     >
       {/* Research Type Selection */}
       <AnimatedSection className="mb-6">
         <div className="glass-card overflow-hidden">
           <div className="border-b border-slate-100 px-6 py-4">
             <h3 className="text-[15px] font-semibold text-slate-900">調査タイプを選択</h3>
-            <p className="text-[12px] text-slate-400">コンサルタントの専門分野を選ぶように</p>
+            <p className="text-[12px] text-slate-400">分析の切り口を選択</p>
           </div>
           <div className="p-6">
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -123,7 +123,7 @@ export default function CustomResearchPage() {
         <div className="glass-card overflow-hidden">
           <div className="border-b border-slate-100 px-6 py-4">
             <h3 className="text-[15px] font-semibold text-slate-900">質問を入力</h3>
-            <p className="text-[12px] text-slate-400">コンサルタントに聞くように、具体的に書くほど精度が上がります</p>
+            <p className="text-[12px] text-slate-400">具体的なキーワードを含めるほど、関連度の高い結果が返ります</p>
           </div>
           <div className="p-6">
             <textarea
@@ -270,7 +270,7 @@ export default function CustomResearchPage() {
                 {/* Source Attribution */}
                 <div className="px-6 py-3 bg-slate-50">
                   <p className="text-[11px] text-slate-400">
-                    Market Radar AI 分析エンジン · データソース: 5W1H Framework
+                    Market Radar データベース検索エンジン · 20件の事業機会 + 11件のトレンドから関連度スコアリング
                   </p>
                 </div>
               </div>

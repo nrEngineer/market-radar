@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
           quantity: 1,
         },
       ],
-      success_url: success_url || `${process.env.NEXTAUTH_URL || 'https://market-radar-rho.vercel.app'}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: success_url || `${process.env.NEXTAUTH_URL || 'https://market-radar-rho.vercel.app'}/?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: cancel_url || `${process.env.NEXTAUTH_URL || 'https://market-radar-rho.vercel.app'}/pricing`,
       customer_email: customer_email,
       metadata: {

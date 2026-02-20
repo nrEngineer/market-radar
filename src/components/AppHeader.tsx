@@ -18,7 +18,7 @@ export function AppHeader() {
               Market Radar
             </h1>
             <p className="hidden text-[11px] font-medium text-slate-400 sm:block">
-              SaaS ビルダーのための AI コンサルタント
+              SaaS ビルダーのためのマーケットインテリジェンス
             </p>
           </div>
         </Link>

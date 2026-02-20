@@ -14,7 +14,7 @@ const pricingPlans = [
     popular: false,
     description: '個人開発のアイデア検証に',
     features: [
-      '月5回の AI リサーチ',
+      '月5回のマーケットリサーチ',
       'トレンド・機会データ閲覧',
       '基本的な市場分析レポート',
       'コミュニティサポート'
@@ -32,8 +32,8 @@ const pricingPlans = [
     popular: true,
     description: 'SaaS を本気で作るインディーハッカー向け',
     features: [
-      '月100回の AI リサーチ',
-      'AI コンサルレポート生成',
+      '月100回のマーケットリサーチ',
+      '市場分析レポート生成',
       '詳細競合分析・モート分析',
       'TAM/SAM/SOM 市場規模算出',
       'Go-to-Market 戦略提案',
@@ -51,7 +51,7 @@ const pricingPlans = [
     popular: false,
     description: 'SaaS チーム・小規模法人向け',
     features: [
-      '無制限 AI リサーチ・レポート',
+      '無制限マーケットリサーチ・レポート',
       'REST API フルアクセス',
       'カスタムダッシュボード',
       '価格戦略・収益モデル分析',
@@ -192,7 +192,7 @@ export default function PricingPage() {
   const handleSelectPlan = async (planId: string) => {
     if (planId === 'free') {
       // Redirect to signup for free plan
-      router.push('/signup?plan=free')
+      router.push('/')
       return
     }
 
@@ -206,7 +206,7 @@ export default function PricingPage() {
         },
         body: JSON.stringify({
           plan: planId,
-          success_url: `${window.location.origin}/dashboard?welcome=true`,
+          success_url: `${window.location.origin}/?welcome=true`,
           cancel_url: `${window.location.origin}/pricing`,
         }),
       })
@@ -258,7 +258,7 @@ export default function PricingPage() {
             <p className="text-xl text-slate-600 max-w-3xl mx-auto">
               マーケター・コンサルが社内にいなくても、
               <br />
-              AI があなたの SaaS 事業を戦略的にサポート。
+              市場データがあなたの SaaS 事業判断をサポート。
             </p>
           </motion.div>
         </div>
@@ -283,7 +283,7 @@ export default function PricingPage() {
               <div className="bg-white rounded-lg p-6 text-center border-2 border-blue-500">
                 <h3 className="text-lg font-bold text-blue-600 mb-2">Market Radar</h3>
                 <div className="text-3xl font-bold text-blue-600 mb-2">¥5,000/月</div>
-                <div className="text-sm text-slate-500">AI コンサル・即時回答</div>
+                <div className="text-sm text-slate-500">マーケットインテリジェンス</div>
                 <Badge variant="emerald">99%コストダウン</Badge>
               </div>
             </div>
@@ -329,7 +329,7 @@ export default function PricingPage() {
                 データの精度はどの程度ですか？
               </h3>
               <p className="text-slate-600 text-sm">
-                Product Hunt、App Store、Hacker Newsなど複数のソースから収集し、AI分析で90%以上の精度を実現しています。
+                App Store、Hacker News等の公開APIからリアルタイム収集し、20件のインディーSaaS事業機会データベースと照合。各データには出典・調査手法を明記しています。
               </p>
             </div>
           </div>

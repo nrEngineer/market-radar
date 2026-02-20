@@ -21,12 +21,12 @@ import { Badge } from '@/components/Badge'
 import { ScoreBar } from '@/components/ScoreBar'
 
 const dashboardFiveW1H = {
-  what: 'SaaS ビルダー向けの AI コンサルティングダッシュボード。事業機会の発見・スコアリング・市場規模分析・競合調査・Go-to-Market 戦略を自動生成',
+  what: 'SaaS ビルダー向けのマーケットインテリジェンスダッシュボード。事業機会の発見・スコアリング・市場規模分析・競合調査・Go-to-Market 戦略データを提供',
   who: 'インディーハッカー、個人開発者、SaaS を作る小規模チーム。マーケティングやコンサルの専門知識がなくても事業判断を行いたい人',
   when: 'アイデア検証段階から事業立ち上げまで。「このサービスは売れるのか？」を判断するタイミングで使う',
   where: '日本市場を主軸に、グローバルトレンドも包含。Product Hunt・App Store・Hacker News・GitHub の4ソースから分析',
   why: 'コンサルに¥500万払わなくても、同等の市場分析・競合調査・事業判断サポートを受けられる。一人でも戦略的に事業を立ち上げられる',
-  how: '① AI リサーチで自由に質問 → ② 事業機会をスコアリングで比較 → ③ TAM/SAM/SOM で市場規模を把握 → ④ アクションプランに沿って実行',
+  how: '① リサーチで自由に質問 → ② 事業機会をスコアリングで比較 → ③ TAM/SAM/SOM で市場規模を把握 → ④ アクションプランに沿って実行',
 }
 
 export default function MarketRadarDashboard() {
@@ -38,7 +38,7 @@ export default function MarketRadarDashboard() {
     { name: 'Product Hunt', count: liveSignals?.totalDataPoints ?? 0, active: !!liveSignals, icon: '🚀' },
     { name: 'App Store', count: liveSignals?.sources.appStore.items ?? 0, active: liveSignals?.sources.appStore.status === 'success', icon: '📱' },
     { name: 'Hacker News', count: liveSignals?.sources.hackerNews.items ?? 0, active: liveSignals?.sources.hackerNews.status === 'success', icon: '🔶' },
-    { name: 'AI 分析エンジン', count: analyticsSummary.dataPointsCollected, active: true, icon: '🧠' },
+    { name: 'データ分析エンジン', count: analyticsSummary.dataPointsCollected, active: true, icon: '🧠' },
   ]
 
   return (
@@ -49,7 +49,7 @@ export default function MarketRadarDashboard() {
           <div className="mb-4 flex items-center gap-3 flex-wrap">
             <div className="inline-flex items-center gap-2 rounded-full border border-[#3d5a99]/15 bg-[#3d5a99]/5 px-3 py-1">
               <span className="live-dot h-1.5 w-1.5 rounded-full bg-[#3d5a99]" />
-              <span className="text-[12px] font-medium text-[#2c4377]">AI 分析稼働中</span>
+              <span className="text-[12px] font-medium text-[#2c4377]">データ収集稼働中</span>
             </div>
             <button
               onClick={refetch}
@@ -73,7 +73,7 @@ export default function MarketRadarDashboard() {
             コンサルなしで<span className="gradient-text">事業判断</span>を
           </h1>
           <p className="mt-3 max-w-2xl text-[14px] leading-relaxed text-slate-500">
-            マーケター不在でも大丈夫。AI が市場分析・競合調査・収益予測・Go-to-Market 戦略を提供。
+            マーケター不在でも大丈夫。市場分析・競合調査・収益予測・Go-to-Market 戦略データを提供。
             あなたの SaaS アイデアを、データドリブンに検証します。
           </p>
 
@@ -86,7 +86,7 @@ export default function MarketRadarDashboard() {
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
               </svg>
-              AI コンサルタントに相談する
+              マーケットリサーチを始める
             </Link>
             <Link
               href="/opportunities"
