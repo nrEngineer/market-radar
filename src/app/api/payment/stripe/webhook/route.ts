@@ -1,13 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
+import { stripe } from '@/server/stripe-client'
 import { activateSubscription, updateSubscription, cancelSubscription } from '@/server/services/subscription-service'
 import { notifyError } from '@/server/discord-notify'
-
-const stripe = process.env.STRIPE_SECRET_KEY
-  ? new Stripe(process.env.STRIPE_SECRET_KEY, {
-      apiVersion: '2026-01-28.clover',
-    })
-  : null
 
 export async function POST(request: NextRequest) {
   try {

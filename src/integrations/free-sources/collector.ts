@@ -169,29 +169,12 @@ interface TrendData {
 }
 
 export class GoogleTrendsAPI {
-  // Note: Google Trends doesn't have official API, using trending search data
-  // Alternative: Use Google Trends RSS feeds and search data
-  
+  // Google Trends has no official API.
+  // Returns empty array — no template/mock data.
+  // If live trend data is needed in the future, consider SerpAPI or pytrends proxy.
+
   async getTechTrends(): Promise<TrendData[]> {
-    // Google Trends has no official API. This returns template data.
-    // TODO: Integrate with unofficial Google Trends scraping or SerpAPI
-    console.warn('[GoogleTrendsAPI] No live API available. Returning template data.')
-    return [
-      {
-        keyword: 'AI agents',
-        interest: 89,
-        relatedQueries: ['autonomous agents', 'AI automation', 'agent frameworks'],
-        risingQueries: ['LangGraph', 'CrewAI', 'AutoGPT alternatives'],
-        region: 'JP'
-      },
-      {
-        keyword: 'no code SaaS',
-        interest: 67,
-        relatedQueries: ['no code platforms', 'visual programming', 'citizen developer'],
-        risingQueries: ['Bubble alternatives', 'Webflow apps', 'no code AI'],
-        region: 'JP'
-      }
-    ];
+    return [];
   }
 }
 

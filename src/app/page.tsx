@@ -166,7 +166,7 @@ export default function MarketRadarDashboard() {
         {isVisible('insights') && (
           <AnimatedSection className="mb-10" delay={0.05}>
             <SectionHeader
-              title="AI インサイト"
+              title="マーケットインサイト"
               subtitle="市場の重要発見"
               icon={<span className="text-base">💡</span>}
               action={

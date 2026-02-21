@@ -1,20 +1,18 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 
 const STORAGE_KEY = 'market-radar-watchlist'
 
 export function useWatchlist() {
-  const [watchlist, setWatchlist] = useState<string[]>([])
-
-  useEffect(() => {
+  const [watchlist, setWatchlist] = useState<string[]>(() => {
+    if (typeof window === 'undefined') return []
     try {
       const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored) setWatchlist(JSON.parse(stored))
-    } catch {
-      // ignore parse errors
-    }
-  }, [])
+      if (stored) return JSON.parse(stored)
+    } catch { /* ignore parse errors */ }
+    return []
+  })
 
   const persist = useCallback((ids: string[]) => {
     setWatchlist(ids)

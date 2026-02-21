@@ -107,11 +107,17 @@ export async function GET(request: NextRequest) {
 
     switch (type) {
       case 'stats':
-        return NextResponse.json(await getStats())
+        return NextResponse.json(await getStats(), {
+          headers: { 'Cache-Control': 'public, max-age=300' }
+        })
       case 'highlights':
-        return NextResponse.json(await getHighlights())
+        return NextResponse.json(await getHighlights(), {
+          headers: { 'Cache-Control': 'public, max-age=300' }
+        })
       case 'categories':
-        return NextResponse.json(await getCategories())
+        return NextResponse.json(await getCategories(), {
+          headers: { 'Cache-Control': 'public, max-age=300' }
+        })
       case 'collection-status':
         return NextResponse.json({
           timestamp: new Date().toISOString(),
@@ -129,6 +135,8 @@ export async function GET(request: NextRequest) {
           lastUpdate: new Date().toISOString(),
           stats, highlights, categories,
           dataSource: useDB ? 'supabase' : 'static'
+        }, {
+          headers: { 'Cache-Control': 'public, max-age=300' }
         })
       }
     }

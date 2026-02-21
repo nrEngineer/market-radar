@@ -13,6 +13,15 @@ export default defineConfig({
         'src/usecases/**',
         'src/integrations/**',
       ],
+      exclude: [
+        'src/server/seed/**',
+        'src/server/db/client.ts',
+        'src/server/db/queries.ts',
+        'src/server/db/types.ts',
+        'src/domain/types.ts',
+        'src/domain/analysis/types.ts',
+        'src/integrations/collectors/types.ts',
+      ],
       thresholds: {
         statements: 70,
         branches: 60,

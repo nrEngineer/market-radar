@@ -22,7 +22,7 @@ export function Footer() {
               </span>
             </div>
             <p className="text-[12px] text-slate-400 max-w-xs leading-relaxed">
-              AI駆動のプロフェッショナル市場調査プラットフォーム。TAM/SAM/SOM、競合分析、リスク評価、収益予測を統合。
+              データ駆動のプロフェッショナル市場調査プラットフォーム。TAM/SAM/SOM、競合分析、リスク評価、収益予測を統合。
             </p>
           </div>
 
@@ -48,7 +48,7 @@ export function Footer() {
             <div className="space-y-1.5">
               <p className="text-[12px] text-slate-500">データ更新: 毎日 03:00 JST</p>
               <p className="text-[12px] text-slate-500">ソース: 4つのAPI</p>
-              <p className="text-[12px] text-slate-500">分析手法: AI + 統計分析</p>
+              <p className="text-[12px] text-slate-500">分析手法: スコアリングエンジン + 統計分析</p>
               <Link href="/methodology" className="text-[12px] text-[#3d5a99] hover:text-[#2c4377] transition-colors block">
                 詳細手法を見る →
               </Link>

@@ -1,5 +1,25 @@
 import { supabaseAdmin, isSupabaseConfigured } from '@/server/db/client'
 
+interface OpportunityRow {
+  id: string
+  title: string
+  category: string
+  scores: { overall: number } | null
+}
+
+interface CategoryRow {
+  name: string
+  total_apps: number | null
+  growth: string | null
+}
+
+interface CollectionLogRow {
+  source: string
+  status: string
+  data_count: number | null
+  timestamp: string
+}
+
 export function isDatabaseConfigured(): boolean {
   return isSupabaseConfigured()
 }
@@ -17,7 +37,11 @@ export async function getStats() {
       totalTrends: trends.count || 0,
       totalCategories: categories.count || 0,
       avgScore: opportunities.data && opportunities.data.length > 0
-        ? Math.round(opportunities.data.reduce((sum: number, opp: any) => sum + (opp.scores?.overall || 0), 0) / opportunities.data.length)
+        ? Math.round(
+            (opportunities.data as unknown as OpportunityRow[]).reduce(
+              (sum, opp) => sum + (opp.scores?.overall || 0), 0
+            ) / opportunities.data.length
+          )
         : 0
     }
   } catch (error) {
@@ -41,7 +65,7 @@ export async function getHighlights() {
 
     if (error) throw error
 
-    return data?.map((opp: any) => ({
+    return (data as unknown as OpportunityRow[] | null)?.map((opp) => ({
       id: opp.id,
       title: opp.title,
       category: opp.category,
@@ -64,7 +88,7 @@ export async function getCategories() {
 
     if (error) throw error
 
-    return data?.map((cat: any) => ({
+    return (data as unknown as CategoryRow[] | null)?.map((cat) => ({
       name: cat.name,
       apps: cat.total_apps || 0,
       growth: cat.growth || '+0%'
@@ -87,7 +111,7 @@ export async function getCollectionStatus() {
 
     return {
       timestamp: new Date().toISOString(),
-      sources: data?.map((log: any) => ({
+      sources: (data as unknown as CollectionLogRow[] | null)?.map((log) => ({
         name: log.source,
         status: log.status,
         items: log.data_count || 0,

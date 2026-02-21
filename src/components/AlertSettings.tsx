@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 
 const STORAGE_KEY = 'market-radar-alerts'
 
@@ -17,14 +17,14 @@ const DEFAULT_ALERTS: AlertConfig[] = [
 
 export function AlertSettings() {
   const [open, setOpen] = useState(false)
-  const [alerts, setAlerts] = useState<AlertConfig[]>(DEFAULT_ALERTS)
-
-  useEffect(() => {
+  const [alerts, setAlerts] = useState<AlertConfig[]>(() => {
+    if (typeof window === 'undefined') return DEFAULT_ALERTS
     try {
       const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored) setAlerts(JSON.parse(stored))
+      if (stored) return JSON.parse(stored)
     } catch { /* ignore */ }
-  }, [])
+    return DEFAULT_ALERTS
+  })
 
   const persist = useCallback((a: AlertConfig[]) => {
     setAlerts(a)

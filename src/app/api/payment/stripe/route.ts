@@ -1,14 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import Stripe from 'stripe'
+import { stripe } from '@/server/stripe-client'
 import { stripeCheckoutSchema } from '@/server/validation/schemas'
 import { notifyError } from '@/server/discord-notify'
-
-// Initialize Stripe with secret key (conditional for build)
-const stripe = process.env.STRIPE_SECRET_KEY 
-  ? new Stripe(process.env.STRIPE_SECRET_KEY, {
-      apiVersion: '2026-01-28.clover',
-    })
-  : null
 
 // Pricing plans configuration
 const PRICING_PLANS = {

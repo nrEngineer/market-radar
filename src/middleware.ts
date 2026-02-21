@@ -85,8 +85,11 @@ async function validateSupabaseAuth(request: NextRequest): Promise<boolean> {
   if (!jwtSecret) return false
   try {
     const secret = new TextEncoder().encode(jwtSecret)
-    const { payload } = await jwtVerify(token, secret)
-    return !!payload.sub
+    const { payload } = await jwtVerify(token, secret, {
+      clockTolerance: 30, // 30s clock skew tolerance
+    })
+    // Require both sub (user ID) and exp (expiration) claims
+    return !!payload.sub && !!payload.exp
   } catch {
     return false
   }

@@ -33,7 +33,7 @@ interface ProductHuntProduct {
     media_url: string
   }
   gallery_urls: string[]
-  related_posts: Array<any>
+  related_posts: Array<Record<string, unknown>>
 }
 
 interface ProductHuntTopic {

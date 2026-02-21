@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 
 const STORAGE_KEY = 'market-radar-dashboard-settings'
 
@@ -24,24 +24,20 @@ const DEFAULT_CARDS: DashboardCardConfig[] = [
 ]
 
 export function useDashboardSettings() {
-  const [cards, setCards] = useState<DashboardCardConfig[]>(DEFAULT_CARDS)
-
-  useEffect(() => {
+  const [cards, setCards] = useState<DashboardCardConfig[]>(() => {
+    if (typeof window === 'undefined') return DEFAULT_CARDS
     try {
       const stored = localStorage.getItem(STORAGE_KEY)
       if (stored) {
         const parsed = JSON.parse(stored) as DashboardCardConfig[]
-        // Merge with defaults to handle new cards added after initial save
-        const merged = DEFAULT_CARDS.map(d => {
+        return DEFAULT_CARDS.map(d => {
           const saved = parsed.find(p => p.id === d.id)
           return saved ? { ...d, visible: saved.visible } : d
         })
-        setCards(merged)
       }
-    } catch {
-      // ignore
-    }
-  }, [])
+    } catch { /* ignore */ }
+    return DEFAULT_CARDS
+  })
 
   const toggleCard = useCallback((id: string) => {
     setCards(prev => {
