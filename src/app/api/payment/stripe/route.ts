@@ -2,37 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { stripe } from '@/server/stripe-client'
 import { stripeCheckoutSchema } from '@/server/validation/schemas'
 import { notifyError } from '@/server/discord-notify'
-
-// Pricing plans configuration
-const PRICING_PLANS = {
-  free: {
-    name: 'Free',
-    price: 0,
-    limits: { analyses: 5, reports: 0, api_calls: 0 },
-    features: ['基本市場分析', '月5回まで', 'コミュニティサポート']
-  },
-  premium: {
-    name: 'Premium',
-    price: 5000,
-    stripe_price_id: 'price_premium_monthly', // TODO: Create in Stripe dashboard
-    limits: { analyses: 100, reports: 10, api_calls: 1000 },
-    features: ['AIレポート生成', '月100回分析', '詳細トレンド分析', 'メールサポート']
-  },
-  professional: {
-    name: 'Professional', 
-    price: 15000,
-    stripe_price_id: 'price_professional_monthly',
-    limits: { analyses: -1, reports: -1, api_calls: 10000 },
-    features: ['無制限分析', 'API アクセス', 'カスタムダッシュボード', '優先サポート']
-  },
-  enterprise: {
-    name: 'Enterprise',
-    price: 50000,
-    stripe_price_id: 'price_enterprise_monthly', 
-    limits: { analyses: -1, reports: -1, api_calls: 100000 },
-    features: ['全機能アクセス', 'ホワイトラベル', '専用サポート', 'SLA保証']
-  }
-}
+import { PRICING_PLANS } from '@/server/config/pricing'
 
 // Create checkout session
 export async function POST(request: NextRequest) {
@@ -46,7 +16,7 @@ export async function POST(request: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { error: 'Invalid request', issues: parsed.error.issues },
+        { error: 'Invalid request parameters' },
         { status: 400 }
       )
     }
@@ -74,10 +44,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid redirect URL' }, { status: 400 })
     }
 
-    // Plan is already validated by Zod schema (premium | professional | enterprise)
     const planConfig = PRICING_PLANS[plan]
 
-    // Create checkout session
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
       payment_method_types: ['card'],
@@ -93,20 +61,17 @@ export async function POST(request: NextRequest) {
       metadata: {
         plan: plan,
         features: JSON.stringify(planConfig.features),
-        limits: JSON.stringify(planConfig.limits)
+        limits: JSON.stringify(planConfig.limits),
       },
       subscription_data: {
-        metadata: {
-          plan: plan,
-        },
+        metadata: { plan },
       },
     })
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       checkout_url: session.url,
-      session_id: session.id 
+      session_id: session.id,
     })
-
   } catch (error) {
     console.error('Stripe checkout error:', error)
     notifyError('payment/stripe', error instanceof Error ? error.message : 'Unknown error').catch(() => {})
@@ -122,6 +87,6 @@ export async function GET() {
   return NextResponse.json({
     plans: PRICING_PLANS,
     currency: 'JPY',
-    billing_cycle: 'monthly'
+    billing_cycle: 'monthly',
   })
 }

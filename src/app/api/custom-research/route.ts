@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { error: 'Invalid request', issues: parsed.error.issues },
+        { error: 'Invalid request parameters' },
         { status: 400 }
       )
     }

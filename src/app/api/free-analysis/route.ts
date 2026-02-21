@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
 
   if (!parsed.success) {
     return NextResponse.json(
-      { error: 'Invalid parameters', issues: parsed.error.issues },
+      { error: 'Invalid request parameters' },
       { status: 400 }
     )
   }

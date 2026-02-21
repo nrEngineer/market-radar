@@ -1,12 +1,19 @@
 import Stripe from 'stripe'
 import { supabaseAdmin } from '@/server/db/client'
 
+function maskEmail(email: string | null | undefined): string {
+  if (!email) return '(none)'
+  const [local, domain] = email.split('@')
+  if (!domain) return '***'
+  return `${local[0]}***@${domain}`
+}
+
 export async function activateSubscription(session: Stripe.Checkout.Session): Promise<void> {
   const plan = session.metadata?.plan
   const customerEmail = session.customer_email
   const subscriptionId = typeof session.subscription === 'string' ? session.subscription : session.subscription?.id
 
-  console.log(`[Subscription] Activated plan=${plan} for email=${customerEmail} session=${session.id}`)
+  console.log(`[Subscription] Activated plan=${plan} for email=${maskEmail(customerEmail)} session=${session.id}`)
 
   if (!customerEmail || !plan) return
 

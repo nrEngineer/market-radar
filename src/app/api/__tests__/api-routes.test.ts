@@ -81,8 +81,8 @@ describe('GET /api/free-analysis', () => {
     const res = await freeAnalysisGET(req as never)
     expect(res.status).toBe(400)
     const body = await res.json()
-    expect(body.error).toBe('Invalid parameters')
-    expect(body.issues).toBeDefined()
+    expect(body.error).toBe('Invalid request parameters')
+    expect(body.issues).toBeUndefined()
   })
 
   it('returns 400 for invalid timeframe parameter', async () => {
@@ -90,7 +90,7 @@ describe('GET /api/free-analysis', () => {
     const res = await freeAnalysisGET(req as never)
     expect(res.status).toBe(400)
     const body = await res.json()
-    expect(body.error).toBe('Invalid parameters')
+    expect(body.error).toBe('Invalid request parameters')
   })
 
   it('returns 200 with valid parameters', async () => {
@@ -120,8 +120,8 @@ describe('POST /api/custom-research', () => {
     const res = await customResearchPOST(req as never)
     expect(res.status).toBe(400)
     const body = await res.json()
-    expect(body.error).toBe('Invalid request')
-    expect(body.issues).toBeDefined()
+    expect(body.error).toBe('Invalid request parameters')
+    expect(body.issues).toBeUndefined()
   })
 
   it('returns 400 for invalid type value', async () => {
@@ -132,7 +132,7 @@ describe('POST /api/custom-research', () => {
     const res = await customResearchPOST(req as never)
     expect(res.status).toBe(400)
     const body = await res.json()
-    expect(body.error).toBe('Invalid request')
+    expect(body.error).toBe('Invalid request parameters')
   })
 
   it('returns 200 with valid body', async () => {

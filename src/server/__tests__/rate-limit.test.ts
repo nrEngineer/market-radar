@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { checkRateLimit, type RateLimitConfig } from '../rate-limit'
+import { checkRateLimit, checkRateLimitAsync, RATE_LIMITS, type RateLimitConfig } from '../rate-limit'
 
 const config: RateLimitConfig = {
   windowMs: 60_000,
@@ -92,5 +92,38 @@ describe('checkRateLimit (in-memory)', () => {
     const result = checkRateLimit(key, highConfig)
     expect(result.allowed).toBe(true)
     expect(result.remaining).toBe(999)
+  })
+})
+
+describe('checkRateLimitAsync (fallback to in-memory)', () => {
+  // Upstash env vars are not set in test, so it falls back to in-memory
+  it('should fall back to in-memory when Upstash is not configured', async () => {
+    const key = `test-async-fallback-${Date.now()}`
+    const result = await checkRateLimitAsync(key, config)
+
+    expect(result.allowed).toBe(true)
+    expect(result.remaining).toBe(2)
+  })
+
+  it('should enforce limits via async path', async () => {
+    const key = `test-async-limit-${Date.now()}`
+    await checkRateLimitAsync(key, config)
+    await checkRateLimitAsync(key, config)
+    await checkRateLimitAsync(key, config)
+
+    const result = await checkRateLimitAsync(key, config)
+    expect(result.allowed).toBe(false)
+    expect(result.remaining).toBe(0)
+    expect(result.retryAfter).toBeGreaterThan(0)
+  })
+})
+
+describe('RATE_LIMITS presets', () => {
+  it('should export all rate limit tiers', () => {
+    expect(RATE_LIMITS.public).toEqual({ windowMs: 60_000, maxRequests: 60 })
+    expect(RATE_LIMITS.authenticated).toEqual({ windowMs: 60_000, maxRequests: 30 })
+    expect(RATE_LIMITS.computation).toEqual({ windowMs: 60_000, maxRequests: 10 })
+    expect(RATE_LIMITS.payment).toEqual({ windowMs: 60_000, maxRequests: 5 })
+    expect(RATE_LIMITS.health).toEqual({ windowMs: 60_000, maxRequests: 120 })
   })
 })

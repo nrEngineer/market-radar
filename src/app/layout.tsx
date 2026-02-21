@@ -47,6 +47,11 @@ export default function RootLayout({
   return (
     <html lang="ja" className={inter.variable}>
       <body className="font-sans bg-[#f8f9fb]">
+        {/* Skip to main content (WCAG 2.1 AA) */}
+        <a href="#main-content" className="skip-link">
+          メインコンテンツへスキップ
+        </a>
+
         {/* Content */}
         <div className="relative min-h-screen flex flex-col">
           {/* Global Header */}
@@ -56,7 +61,7 @@ export default function RootLayout({
           <Navigation />
 
           {/* Main */}
-          <main className="flex-1">
+          <main id="main-content" className="flex-1">
             {children}
           </main>
 
